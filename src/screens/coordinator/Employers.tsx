@@ -41,18 +41,23 @@ export default function Employers({ onNavigate, onSelectEmployer }: EmployersPro
     <div className="ep-page">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-5">
-        <h1
-          className="ep-section-title"
-          style={{ fontFamily: "var(--font-display)", fontWeight: 700, color: "#1a2540" }}
-        >
-          Employers
-        </h1>
+        <div>
+          <h1
+            className="ep-section-title"
+            style={{ fontFamily: "var(--font-display)", fontWeight: 700, color: "#1a2540" }}
+          >
+            Employers
+          </h1>
+          <p className="text-sm mt-0.5" style={{ color: "#5b6a8a" }}>
+            {employers.length} employer organisations
+          </p>
+        </div>
         <button
           className="flex items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold"
           style={{ backgroundColor: "#1b5db4", color: "#fff", fontFamily: "var(--font-display)" }}
         >
           <Plus size={16} />
-          Add Employer
+          Add employer
         </button>
       </div>
 
