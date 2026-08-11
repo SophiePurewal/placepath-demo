@@ -260,12 +260,11 @@ export default function Sidebar({
           {!collapsed && <span>Collapse</span>}
         </button>
 
-        {/* User info */}
-        {!collapsed && (
-          <div
-            className="flex items-center gap-3 px-4 py-3 border-t"
-            style={{ borderColor: "rgba(255,255,255,0.08)" }}
-          >
+        {/* User info — avatar remains visible when the sidebar is collapsed */}
+        <div
+          className={`flex items-center py-3 border-t ${collapsed ? "justify-center px-2" : "gap-3 px-4"}`}
+          style={{ borderColor: "rgba(255,255,255,0.08)" }}
+        >
             <div
               className="flex-shrink-0 flex items-center justify-center rounded-full text-sm font-semibold"
               style={{
@@ -278,7 +277,7 @@ export default function Sidebar({
             >
               {userInfo.initials}
             </div>
-            <div className="min-w-0">
+            {!collapsed && <div className="min-w-0">
               <p
                 className="text-sm font-semibold truncate"
                 style={{ color: "#fff", fontFamily: "var(--font-display)" }}
@@ -291,9 +290,8 @@ export default function Sidebar({
               >
                 {userInfo.title}
               </p>
-            </div>
-          </div>
-        )}
+            </div>}
+        </div>
 
         {/* Sign out */}
         <div
