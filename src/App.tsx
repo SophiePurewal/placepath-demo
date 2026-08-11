@@ -5,6 +5,7 @@ import Sidebar, { type Screen } from "./components/Sidebar";
 import BottomNav from "./components/BottomNav";
 import Toast, { type ToastData } from "./components/Toast";
 import NotificationsPanel from "./components/NotificationsPanel";
+import ProfileAvatar from "./components/ProfileAvatar";
 import SignIn from "./screens/SignIn";
 import Dashboard from "./screens/coordinator/Dashboard";
 import CreatePlacement from "./screens/coordinator/CreatePlacement";
@@ -344,13 +345,7 @@ export default function App() {
               aria-haspopup="menu"
               aria-label="User profile and options"
             >
-              <div
-                className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-semibold flex-shrink-0"
-                style={{ backgroundColor: "#1b5db4", color: "#fff", fontFamily: "var(--font-display)" }}
-                aria-hidden="true"
-              >
-                {profile.initials}
-              </div>
+              <ProfileAvatar role={role} size={32} decorative />
               <div className="hidden sm:block text-left">
                 <p
                   className="text-sm font-semibold leading-tight"
@@ -389,12 +384,7 @@ export default function App() {
                     className="flex items-center gap-3 px-4 py-4 border-b"
                     style={{ borderColor: "#ebf3fc" }}
                   >
-                    <div
-                      className="w-9 h-9 rounded-full flex items-center justify-center text-sm font-semibold flex-shrink-0"
-                      style={{ backgroundColor: "#1b5db4", color: "#fff", fontFamily: "var(--font-display)" }}
-                    >
-                      {profile.initials}
-                    </div>
+                    <ProfileAvatar role={role} size={36} />
                     <div>
                       <p
                         className="text-sm font-semibold"
@@ -423,16 +413,7 @@ export default function App() {
                       onClick={() => switchRole(opt.role)}
                       className="w-full flex items-center gap-3 px-4 py-2.5 text-left transition-colors hover:bg-ep-blue-lighter"
                     >
-                      <div
-                        className="w-7 h-7 rounded-full flex items-center justify-center text-xs font-semibold flex-shrink-0"
-                        style={{
-                          backgroundColor: role === opt.role ? "#1b5db4" : "#e8f0f8",
-                          color: role === opt.role ? "#fff" : "#4b82c8",
-                          fontFamily: "var(--font-display)",
-                        }}
-                      >
-                        {opt.name.split(" ").map((n) => n[0]).join("")}
-                      </div>
+                      <ProfileAvatar role={opt.role} size={28} />
                       <div className="flex-1 min-w-0">
                         <p
                           className="text-sm font-medium"
