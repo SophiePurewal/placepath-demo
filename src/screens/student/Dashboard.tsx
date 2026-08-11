@@ -238,7 +238,7 @@ export default function StudentDashboard({ onAddToast }: StudentDashboardProps) 
               {checklist.map((item) => (
                 <li
                   key={item.id}
-                  className="flex items-center gap-3 px-5 py-3.5 border-b last:border-b-0 transition-colors hover:bg-ep-blue-lighter"
+                  className="ep-action-row flex items-center gap-3 px-5 py-3.5 border-b last:border-b-0"
                   style={{ borderColor: "#eef2f7" }}
                 >
                   <button
@@ -287,7 +287,7 @@ export default function StudentDashboard({ onAddToast }: StudentDashboardProps) 
               {schedule.map((s, i) => (
                 <li
                   key={i}
-                  className="flex items-start gap-4 px-5 py-3.5 border-b last:border-b-0"
+                  className="ep-action-row flex items-start gap-4 px-5 py-3.5 border-b last:border-b-0"
                   style={{ borderColor: "#eef2f7" }}
                 >
                   <div
@@ -318,7 +318,7 @@ export default function StudentDashboard({ onAddToast }: StudentDashboardProps) 
               {objectives.map((o, i) => (
                 <li
                   key={i}
-                  className="flex items-start gap-3 px-5 py-3.5 border-b last:border-b-0"
+                  className="ep-action-row flex items-start gap-3 px-5 py-3.5 border-b last:border-b-0"
                   style={{ borderColor: "#eef2f7" }}
                 >
                   <div
@@ -367,7 +367,7 @@ export default function StudentDashboard({ onAddToast }: StudentDashboardProps) 
               ].map(({ key, val }) => (
                 <div
                   key={key}
-                  className="flex gap-3 px-5 py-3 border-b last:border-b-0"
+                  className="ep-action-row flex gap-3 px-5 py-3 border-b last:border-b-0"
                   style={{ borderColor: "#eef2f7" }}
                 >
                   <dt className="w-24 text-xs flex-shrink-0 pt-0.5" style={{ color: "#5b6a8a" }}>{key}</dt>
@@ -389,13 +389,13 @@ export default function StudentDashboard({ onAddToast }: StudentDashboardProps) 
 
           {/* Contact */}
           <SectionCard title="Contact">
-            <div className="px-5 py-4 space-y-3">
+            <div>
               {[
                 { label: "Supervisor", name: "Janine Okafor", phone: "07891 234 568", role: "Deputy Manager" },
                 { label: "Tutor", name: "Mrs J. Pearce", phone: "01253 000 100", role: "Health & Social Care" },
                 { label: "Coordinator", name: "Sarah Ahmed", phone: "01253 000 200", role: "Placement Coordinator" },
               ].map((c) => (
-                <div key={c.label} className="pb-3 border-b last:border-b-0 last:pb-0" style={{ borderColor: "#eef2f7" }}>
+                <div key={c.label} className="ep-action-row px-5 py-3 border-b last:border-b-0" style={{ borderColor: "#eef2f7" }}>
                   <p className="text-xs mb-1" style={{ color: "#5b6a8a" }}>{c.label}</p>
                   <p className="text-sm font-medium" style={{ color: "#1a2540", fontFamily: "var(--font-display)" }}>
                     {c.name}
@@ -423,7 +423,7 @@ export default function StudentDashboard({ onAddToast }: StudentDashboardProps) 
               ].map((d) => (
                 <li
                   key={d.name}
-                  className="flex items-center gap-3 px-5 py-3 border-b last:border-b-0"
+                  className="ep-action-row flex items-center gap-3 px-5 py-3 border-b last:border-b-0"
                   style={{ borderColor: "#eef2f7" }}
                 >
                   <FileText size={15} style={{ color: "#4b82c8", flexShrink: 0 }} />
@@ -455,7 +455,7 @@ export default function StudentDashboard({ onAddToast }: StudentDashboardProps) 
             ].map((m, i) => (
               <button
                 key={i}
-                className="w-full flex items-start gap-3 px-5 py-3 border-b text-left transition-colors hover:bg-ep-blue-lighter"
+                className="ep-action-row w-full flex items-start gap-3 px-5 py-3 border-b text-left"
                 style={{ borderColor: "#eef2f7" }}
                 onClick={() => setShowMessage(true)}
                 aria-label={`Message from ${m.sender}`}
