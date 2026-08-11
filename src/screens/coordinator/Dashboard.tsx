@@ -112,14 +112,15 @@ export default function Dashboard({ onNavigate, onAddToast }: DashboardProps) {
           style={{ backgroundColor: "#1b5db4", color: "#fff", fontFamily: "var(--font-display)" }}
         >
           <Plus size={16} />
-          New Placement
+          New placement
         </button>
       </div>
 
-      {/* Status summary strip — compact metric row, not a competing tile */}
-      <div className="ep-metric-grid mb-6">
+      {/* Status summary strip — follows the same flat pattern as the student home */}
+      <div className="ep-surface p-4 mb-6">
+        <div className="flex flex-wrap items-center gap-x-8 gap-y-4">
         {Object.entries(statusSummary).map(([label, { count, color }]) => (
-          <div key={label} className="ep-metric-item flex items-center gap-3">
+          <div key={label} className="flex items-center gap-3">
             <span
               className="w-2 h-2 rounded-full flex-shrink-0"
               style={{ backgroundColor: color }}
@@ -131,17 +132,18 @@ export default function Dashboard({ onNavigate, onAddToast }: DashboardProps) {
             <span className="text-sm" style={{ color: "#5b6a8a" }}>{label}</span>
           </div>
         ))}
+        </div>
       </div>
 
       {/* Main grid */}
-      <div className="ep-dashboard-workspace">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 items-start">
         {/* Tasks */}
-        <Card title="Outstanding Tasks" action="View all" onAction={() => onNavigate("tasks")}>
+        <Card title="Outstanding tasks" action="View all" onAction={() => onNavigate("tasks")}>
           <ul>
             {taskList.slice(0, 5).map((t) => (
               <li
                 key={t.id}
-                className="flex items-start gap-3 px-5 py-3 border-b last:border-b-0 transition-colors hover:bg-ep-blue-lighter"
+                className="ep-action-row flex items-start gap-3 px-5 py-3 border-b last:border-b-0"
                 style={{ borderColor: "#eef2f7" }}
               >
                 <button
@@ -178,13 +180,13 @@ export default function Dashboard({ onNavigate, onAddToast }: DashboardProps) {
         </Card>
 
         {/* Placement Offers */}
-        <Card title="Placement Offers" action="View all" onAction={() => onNavigate("placements")}>
+        <Card title="Placement offers" action="View all" onAction={() => onNavigate("placements")}>
           <ul>
             {placementOffers.map((o) => (
               <li key={o.id}>
                 <button
                   onClick={() => onNavigate("employer-detail")}
-                  className="w-full flex items-center justify-between px-5 py-3 border-b text-left transition-colors hover:bg-ep-blue-lighter"
+                  className="ep-action-row w-full flex items-center justify-between px-5 py-3 border-b text-left"
                   style={{ borderColor: "#eef2f7" }}
                   aria-label={`View offer from ${o.contact} at ${o.employer}`}
                 >
@@ -207,7 +209,7 @@ export default function Dashboard({ onNavigate, onAddToast }: DashboardProps) {
         </Card>
 
         {/* Employer Locations */}
-        <Card title="Employer Locations" action="View map" onAction={() => onNavigate("employers")}>
+        <Card title="Employer locations" action="View map" onAction={() => onNavigate("employers")}>
           {/* Map placeholder */}
           <div
             className="mx-5 mt-4 mb-3 rounded-lg overflow-hidden relative"
@@ -243,7 +245,7 @@ export default function Dashboard({ onNavigate, onAddToast }: DashboardProps) {
               <li key={l.id}>
                 <button
                   onClick={() => onNavigate("employer-detail")}
-                  className="w-full flex items-center justify-between px-5 py-3 border-b text-left transition-colors hover:bg-ep-blue-lighter"
+                  className="ep-action-row w-full flex items-center justify-between px-5 py-3 border-b text-left"
                   style={{ borderColor: "#eef2f7" }}
                   aria-label={`View ${l.name} — ${l.placements} placements`}
                 >
@@ -276,7 +278,7 @@ export default function Dashboard({ onNavigate, onAddToast }: DashboardProps) {
             {shownMessages.map((m) => (
               <li
                 key={m.id}
-                className="flex items-start gap-3 px-5 py-3 border-b last:border-b-0 hover:bg-ep-blue-lighter cursor-pointer"
+                className="ep-action-row flex items-start gap-3 px-5 py-3 border-b last:border-b-0 cursor-pointer"
                 style={{ borderColor: "#eef2f7" }}
               >
                 <div
@@ -327,12 +329,12 @@ export default function Dashboard({ onNavigate, onAddToast }: DashboardProps) {
         </Card>
 
         {/* Upcoming Visits */}
-        <Card title="Upcoming Visits" action="View all" onAction={() => onNavigate("visits")}>
+        <Card title="Upcoming visits" action="View all" onAction={() => onNavigate("visits")}>
           <ul>
             {visits.map((v) => (
               <li
                 key={v.id}
-                className="flex items-start gap-3 px-5 py-3 border-b last:border-b-0 hover:bg-ep-blue-lighter"
+                className="ep-action-row flex items-start gap-3 px-5 py-3 border-b last:border-b-0"
                 style={{ borderColor: "#eef2f7" }}
               >
                 <div
@@ -358,14 +360,14 @@ export default function Dashboard({ onNavigate, onAddToast }: DashboardProps) {
         </Card>
 
         {/* Placements requiring attention */}
-        <Card title="Requires Attention" action="View all" onAction={() => onNavigate("placements")}>
+        <Card title="Requires attention" action="View all" onAction={() => onNavigate("placements")}>
           <ul>
             {placements
               .filter((p) => ["at-risk", "due-diligence", "awaiting-employer"].includes(p.status))
               .map((p) => (
                 <li key={p.id}>
                 <button
-                  className="w-full flex items-start gap-3 px-5 py-3 border-b text-left transition-colors hover:bg-ep-blue-lighter"
+                  className="ep-action-row w-full flex items-start gap-3 px-5 py-3 border-b text-left"
                   style={{ borderColor: "#eef2f7" }}
                   onClick={() => onNavigate("placements")}
                   aria-label={`View ${p.title} — ${p.status}`}
