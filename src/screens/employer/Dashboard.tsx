@@ -47,14 +47,14 @@ const electricalRequest: PlacementRequest = {
 
 function Card({ title, children, className }: { title: string; children: React.ReactNode; className?: string }) {
   return (
-    <div className={`ep-card ${className ?? ""}`}>
+    <section className={`ep-panel ${className ?? ""}`}>
       <div className="px-5 py-4 border-b" style={{ borderColor: "#eef2f7" }}>
-        <h2 className="text-sm font-semibold uppercase tracking-wide" style={{ fontFamily: "var(--font-display)", color: "#1a2540", letterSpacing: "0.06em" }}>
+        <h2 className="text-base font-semibold" style={{ fontFamily: "var(--font-display)", color: "#1a2540" }}>
           {title}
         </h2>
       </div>
       {children}
-    </div>
+    </section>
   );
 }
 
@@ -126,14 +126,14 @@ export default function EmployerDashboard({ onAddToast }: EmployerDashboardProps
       </div>
 
       {/* Summary strip */}
-      <div className="ep-surface grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6 p-4">
+      <div className="ep-metric-grid mb-6">
         {[
           { label: "Placement requests", val: "2", icon: Clock, color: "#f59e0b" },
           { label: "Active placements", val: "3", icon: CheckCircle, color: "#22c55e" },
           { label: "Students this term", val: "1", icon: Users, color: "#1b5db4" },
           { label: "Pending actions", val: "2", icon: AlertCircle, color: "#ef4444" },
         ].map(({ label, val, icon: Icon, color }) => (
-          <div key={label} className="flex items-center gap-3">
+          <div key={label} className="ep-metric-item flex items-center gap-3">
             <div className="w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0" style={{ backgroundColor: `${color}18` }}>
               <Icon size={16} style={{ color }} />
             </div>

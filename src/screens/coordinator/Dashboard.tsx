@@ -42,14 +42,14 @@ function Card({
   children: React.ReactNode;
 }) {
   return (
-    <section className="ep-section">
+    <section className="ep-panel">
       <div
         className="flex items-center justify-between px-5 py-4 border-b"
         style={{ borderColor: "#eef2f7" }}
       >
         <h2
-          className="text-sm font-semibold uppercase tracking-wide"
-          style={{ fontFamily: "var(--font-display)", color: "#1a2540", letterSpacing: "0.06em" }}
+          className="text-base font-semibold"
+          style={{ fontFamily: "var(--font-display)", color: "#1a2540" }}
         >
           {title}
         </h2>
@@ -117,15 +117,15 @@ export default function Dashboard({ onNavigate, onAddToast }: DashboardProps) {
       </div>
 
       {/* Status summary strip — compact metric row, not a competing tile */}
-      <div className="ep-status-band flex flex-wrap gap-x-6 gap-y-3 mb-6 px-4 py-3">
+      <div className="ep-metric-grid mb-6">
         {Object.entries(statusSummary).map(([label, { count, color }]) => (
-          <div key={label} className="flex items-center gap-2">
+          <div key={label} className="ep-metric-item flex items-center gap-3">
             <span
               className="w-2 h-2 rounded-full flex-shrink-0"
               style={{ backgroundColor: color }}
               aria-hidden="true"
             />
-            <span className="text-sm font-semibold" style={{ fontFamily: "var(--font-display)", color: "#1a2540" }}>
+            <span className="text-2xl font-bold" style={{ fontFamily: "var(--font-display)", color: "#1a2540" }}>
               {count}
             </span>
             <span className="text-sm" style={{ color: "#5b6a8a" }}>{label}</span>

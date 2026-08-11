@@ -7,7 +7,7 @@
   --color-ep-blue-mid: #4b82c8;
   --color-ep-blue-light: #ebf3fc;
   --color-ep-blue-lighter: #f2f7fd;
-  --color-ep-surface: #eef2f7;
+  --color-ep-surface: #f4f6f9;
   --color-ep-white: #ffffff;
   --color-ep-border: #d5e2f0;
   --color-ep-text: #1a2540;
@@ -52,8 +52,8 @@
 
 /* ── Fluid type scale ────────────────────────────────────────────────────── */
 :root {
-  /* Page title: 28px mobile → 40px desktop */
-  --text-page-title: clamp(1.75rem, 4vw + 0.25rem, 2.5rem);
+  /* Page title: 28px mobile → 32px desktop */
+  --text-page-title: clamp(1.75rem, 2vw + 0.5rem, 2rem);
   /* Section title (Tasks, Messages heading): 22px → 28px */
   --text-section-title: clamp(1.375rem, 3vw + 0.25rem, 1.75rem);
   /* Card section heading (uppercase label): stays compact */
@@ -105,7 +105,7 @@ body {
   font-size: 1rem;        /* 16px — never smaller */
   line-height: 1.5;
   color: #1a2540;
-  background-color: #eef2f7; /* slightly darker so white tiles read as elevated */
+  background-color: #f4f6f9;
   -webkit-font-smoothing: antialiased;
 }
 
@@ -184,6 +184,12 @@ nav button:focus-visible {
   outline-offset: -2px;
 }
 
+nav .nav-btn {
+  width: calc(100% - 1rem);
+  margin-inline: 0.5rem;
+  border-radius: 10px;
+}
+
 /* ── Sidebar nav-link underline interaction ──────────────────────────────── */
 .nav-btn:hover .nav-label,
 .nav-btn:focus-visible .nav-label {
@@ -232,6 +238,9 @@ textarea {
 /* Page wrapper — consistent gutters, no max-width on pages */
 .ep-page {
   padding: var(--page-y) var(--page-x);
+  width: 100%;
+  max-width: 1600px;
+  margin-inline: auto;
 }
 
 /* Fluid auto-fit dashboard grid */
@@ -245,10 +254,18 @@ textarea {
 /* White tiles lift off the #eef2f7 background via shadow — no outlines      */
 .ep-card {
   background: #ffffff;
-  border-radius: 0;
+  border-radius: 12px;
   box-shadow: none;
-  border-top: 1px solid #dfe7f1;
-  border-bottom: 1px solid #dfe7f1;
+  border: 1px solid #e3e9f1;
+  overflow: hidden;
+}
+
+/* Elevated modules are reserved for dashboard summaries and key actions. */
+.ep-panel {
+  min-width: 0;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(20, 35, 65, 0.08);
   overflow: hidden;
 }
 
@@ -256,8 +273,8 @@ textarea {
 .ep-dashboard-workspace {
   display: grid;
   grid-template-columns: 1fr;
-  background: #ffffff;
-  border-top: 1px solid #dfe7f1;
+  gap: 1.25rem;
+  background: transparent;
 }
 
 .ep-section {
@@ -272,12 +289,52 @@ textarea {
   border-bottom: 1px solid #dfe7f1;
 }
 
+.ep-metric-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1px;
+  padding: 0;
+  background: #e3e9f1;
+  border: 1px solid #e3e9f1;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(20, 35, 65, 0.06);
+  overflow: hidden;
+}
+
+.ep-metric-item {
+  min-width: 0;
+  padding: 1rem;
+  background: #ffffff;
+}
+
+.ep-toolbar {
+  padding: 0.75rem;
+  background: #ffffff;
+  border: 1px solid #e3e9f1;
+  border-radius: 12px;
+}
+
+.ep-toolbar input {
+  background: #f8fafc !important;
+}
+
 @media (min-width: 768px) {
   .ep-dashboard-workspace {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(12, minmax(0, 1fr));
   }
-  .ep-dashboard-workspace > .ep-section:nth-child(odd) {
-    border-right: 1px solid #dfe7f1;
+  .ep-dashboard-workspace > .ep-panel {
+    grid-column: span 6;
+  }
+  .ep-dashboard-workspace > .ep-panel:nth-child(1),
+  .ep-dashboard-workspace > .ep-panel:nth-child(3) {
+    grid-column: span 7;
+  }
+  .ep-dashboard-workspace > .ep-panel:nth-child(2),
+  .ep-dashboard-workspace > .ep-panel:nth-child(4) {
+    grid-column: span 5;
+  }
+  .ep-metric-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 }
 
@@ -300,8 +357,19 @@ textarea {
 .ep-surface {
   background: #ffffff;
   border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(20, 35, 65, 0.08);
+  box-shadow: 0 2px 10px rgba(20, 35, 65, 0.08);
   overflow: hidden;
+}
+
+@media (max-width: 767px) {
+  .ep-page {
+    padding-bottom: 6rem;
+  }
+  .ep-panel,
+  .ep-card,
+  .ep-metric-grid {
+    border-radius: 10px;
+  }
 }
 
 /* ── Scrollbar ───────────────────────────────────────────────────────────── */

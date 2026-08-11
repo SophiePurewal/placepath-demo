@@ -250,7 +250,7 @@ export default function App() {
   return (
     <SharedStateProvider>
     <a href="#main-content" className="skip-link">Skip to main content</a>
-    <div className="flex h-screen overflow-hidden" style={{ backgroundColor: "#eef2f7" }}>
+    <div className="flex h-screen overflow-hidden" style={{ backgroundColor: "#f4f6f9" }}>
       {/* Sidebar */}
       <Sidebar
         role={role}
@@ -266,8 +266,8 @@ export default function App() {
       <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
         {/* ── Global header ── */}
         <header
-          className="flex items-center gap-2 px-4 flex-shrink-0"
-          style={{ height: 64, backgroundColor: "#fff", boxShadow: "0 1px 0 rgba(20, 35, 65, 0.07)", zIndex: 10 }}
+          className="flex items-center gap-2 px-4 md:px-6 flex-shrink-0"
+          style={{ height: 68, backgroundColor: "#fff", borderBottom: "1px solid #e3e9f1", zIndex: 10 }}
         >
           {/* Mobile: hamburger */}
           <button

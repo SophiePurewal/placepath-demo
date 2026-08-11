@@ -56,7 +56,7 @@ export default function Placements({ onNavigate }: PlacementsProps) {
       </div>
 
       {/* Search + filter toolbar */}
-      <div className="flex flex-col sm:flex-row gap-3 mb-4">
+      <div className="ep-toolbar flex flex-col sm:flex-row gap-3 mb-4">
         <div className="relative flex-1">
           <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2" style={{ color: "#9ca3af" }} />
           <input

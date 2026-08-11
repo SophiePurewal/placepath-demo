@@ -65,14 +65,14 @@ function SectionCard({
   onAction?: () => void;
 }) {
   return (
-    <div className="ep-card">
+    <section className="ep-panel">
       <div
         className="flex items-center justify-between px-5 py-4 border-b"
         style={{ borderColor: "#eef2f7" }}
       >
         <h2
-          className="text-sm font-semibold uppercase tracking-wide"
-          style={{ fontFamily: "var(--font-display)", color: "#1a2540", letterSpacing: "0.06em" }}
+          className="text-base font-semibold"
+          style={{ fontFamily: "var(--font-display)", color: "#1a2540" }}
         >
           {title}
         </h2>
@@ -87,7 +87,7 @@ function SectionCard({
         )}
       </div>
       <div>{children}</div>
-    </div>
+    </section>
   );
 }
 

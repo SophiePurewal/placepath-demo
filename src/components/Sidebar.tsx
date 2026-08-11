@@ -184,7 +184,7 @@ export default function Sidebar({
               color: "#7db8f5",
             }}
           >
-            eP
+            PP
           </span>
         )}
         {/* mobile close */}
