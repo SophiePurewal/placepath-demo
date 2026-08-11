@@ -159,7 +159,7 @@ export default function Placements({ onNavigate }: PlacementsProps) {
               <button
                 key={p.id}
                 onClick={() => setSelectedId(selected ? null : p.id)}
-                className="w-full flex items-start gap-4 text-left"
+                className="ep-action-row w-full flex items-start gap-4 text-left"
                 style={{
                   paddingTop: 14,
                   paddingBottom: 14,
