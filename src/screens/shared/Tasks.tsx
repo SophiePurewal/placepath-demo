@@ -275,7 +275,7 @@ export default function Tasks({ role, onAddToast }: TasksProps) {
               <div key={task.id}>
                 {/* Task row */}
                 <div
-                  className="flex items-start gap-3 py-3.5"
+                  className="ep-action-row flex items-start gap-3 py-3.5"
                   style={{
                     paddingLeft: expanded ? 13 : 16,
                     paddingRight: 16,
