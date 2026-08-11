@@ -1,4 +1,5 @@
 import { useEffect, useRef } from "react";
+import ProfileAvatar from "./ProfileAvatar";
 import {
   Home,
   CheckSquare,
@@ -265,18 +266,7 @@ export default function Sidebar({
           className={`flex items-center py-3 border-t ${collapsed ? "justify-center px-2" : "gap-3 px-4"}`}
           style={{ borderColor: "rgba(255,255,255,0.08)" }}
         >
-            <div
-              className="flex-shrink-0 flex items-center justify-center rounded-full text-sm font-semibold"
-              style={{
-                width: 36,
-                height: 36,
-                backgroundColor: "#1b5db4",
-                color: "#fff",
-                fontFamily: "var(--font-display)",
-              }}
-            >
-              {userInfo.initials}
-            </div>
+            <ProfileAvatar role={role} size={36} />
             {!collapsed && <div className="min-w-0">
               <p
                 className="text-sm font-semibold truncate"
