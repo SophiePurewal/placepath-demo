@@ -7,7 +7,7 @@
   --color-ep-blue-mid: #4b82c8;
   --color-ep-blue-light: #ebf3fc;
   --color-ep-blue-lighter: #f2f7fd;
-  --color-ep-surface: #f4f6f9;
+  --color-ep-surface: #ffffff;
   --color-ep-white: #ffffff;
   --color-ep-border: #d5e2f0;
   --color-ep-text: #1a2540;
@@ -105,7 +105,7 @@ body {
   font-size: 1rem;        /* 16px — never smaller */
   line-height: 1.5;
   color: #1a2540;
-  background-color: #f4f6f9;
+  background-color: #ffffff;
   -webkit-font-smoothing: antialiased;
 }
 
