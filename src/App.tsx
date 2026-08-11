@@ -250,7 +250,7 @@ export default function App() {
   return (
     <SharedStateProvider>
     <a href="#main-content" className="skip-link">Skip to main content</a>
-    <div className="flex h-screen overflow-hidden" style={{ backgroundColor: "#f4f6f9" }}>
+    <div className="flex h-screen overflow-hidden" style={{ backgroundColor: "#ffffff" }}>
       {/* Sidebar */}
       <Sidebar
         role={role}
