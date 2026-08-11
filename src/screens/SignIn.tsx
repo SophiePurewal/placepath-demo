@@ -38,7 +38,7 @@ export default function SignIn({ onSignIn }: SignInProps) {
   return (
     <div
       className="min-h-screen flex"
-      style={{ backgroundColor: "#f4f7fb" }}
+      style={{ backgroundColor: "#ffffff" }}
     >
       {/* Left panel */}
       <div
@@ -74,7 +74,7 @@ export default function SignIn({ onSignIn }: SignInProps) {
       </div>
 
       {/* Right panel */}
-      <div className="flex-1 flex items-center justify-center p-6">
+      <div className="flex-1 flex items-center justify-center px-6 py-10">
         <div className="w-full max-w-md">
           {/* Mobile logo */}
           <div className="lg:hidden mb-8 text-center">
@@ -90,10 +90,7 @@ export default function SignIn({ onSignIn }: SignInProps) {
             </span>
           </div>
 
-          <div
-            className="bg-white rounded-xl shadow-sm border p-8"
-            style={{ borderColor: "#d5e2f0" }}
-          >
+          <div>
             <h1
               className="text-2xl mb-1"
               style={{ fontFamily: "var(--font-display)", fontWeight: 700, color: "#1a2540" }}
@@ -105,24 +102,21 @@ export default function SignIn({ onSignIn }: SignInProps) {
             </p>
 
             {/* Prototype role selector */}
-            <div
-              className="mb-6 rounded-lg p-4 border"
-              style={{ backgroundColor: "#ebf3fc", borderColor: "#bdd5f4" }}
-            >
-              <p
-                className="text-xs font-semibold uppercase tracking-wide mb-2"
-                style={{ color: "#1b5db4", fontFamily: "var(--font-display)" }}
+            <fieldset className="mb-7 border-y" style={{ borderColor: "#e3e9f1" }}>
+              <legend
+                className="text-xs font-semibold uppercase tracking-wide pr-3"
+                style={{ color: "#5b6a8a", fontFamily: "var(--font-display)" }}
               >
                 Preview the prototype as
-              </p>
-              <div className="space-y-2">
+              </legend>
+              <div>
                 {roleOptions.map((r) => (
                   <label
                     key={r.value}
-                    className="flex items-center gap-3 cursor-pointer rounded-md p-2 transition-colors"
+                    className="flex items-center gap-3 cursor-pointer px-1 py-3.5 transition-colors border-b last:border-b-0"
                     style={{
-                      backgroundColor: role === r.value ? "#fff" : "transparent",
-                      border: role === r.value ? "1px solid #bdd5f4" : "1px solid transparent",
+                      backgroundColor: role === r.value ? "#f2f7fd" : "transparent",
+                      borderColor: "#e3e9f1",
                     }}
                   >
                     <input
@@ -152,7 +146,7 @@ export default function SignIn({ onSignIn }: SignInProps) {
                   </label>
                 ))}
               </div>
-            </div>
+            </fieldset>
 
             <form onSubmit={handleSubmit} noValidate>
               {error && (
