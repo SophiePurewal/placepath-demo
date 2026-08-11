@@ -125,15 +125,16 @@ export default function EmployerDashboard({ onAddToast }: EmployerDashboardProps
         </p>
       </div>
 
-      {/* Summary strip */}
-      <div className="ep-metric-grid mb-6">
+      {/* Summary strip — follows the same flat pattern as the student home */}
+      <div className="ep-surface p-4 mb-6">
+        <div className="flex flex-wrap items-center gap-x-8 gap-y-4">
         {[
           { label: "Placement requests", val: "2", icon: Clock, color: "#f59e0b" },
           { label: "Active placements", val: "3", icon: CheckCircle, color: "#22c55e" },
           { label: "Students this term", val: "1", icon: Users, color: "#1b5db4" },
           { label: "Pending actions", val: "2", icon: AlertCircle, color: "#ef4444" },
         ].map(({ label, val, icon: Icon, color }) => (
-          <div key={label} className="ep-metric-item flex items-center gap-3">
+          <div key={label} className="flex items-center gap-3">
             <div className="w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0" style={{ backgroundColor: `${color}18` }}>
               <Icon size={16} style={{ color }} />
             </div>
@@ -143,6 +144,7 @@ export default function EmployerDashboard({ onAddToast }: EmployerDashboardProps
             </div>
           </div>
         ))}
+        </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 items-start">
@@ -150,9 +152,9 @@ export default function EmployerDashboard({ onAddToast }: EmployerDashboardProps
         <div className="flex flex-col gap-5">
 
           {/* Nessie Nursery — shared placement request */}
-          <Card title="Placement Requests">
+          <Card title="Placement requests">
             {/* Nessie Nursery request */}
-            <div className="px-5 py-4 border-b" style={{ borderColor: "#eef2f7" }}>
+            <div className="ep-action-row px-5 py-4 border-b" style={{ borderColor: "#eef2f7" }}>
               <div className="flex items-start justify-between gap-3 mb-3">
                 <div>
                   <p className="font-semibold text-sm" style={{ fontFamily: "var(--font-display)", color: "#1a2540" }}>
@@ -255,7 +257,7 @@ export default function EmployerDashboard({ onAddToast }: EmployerDashboardProps
             </div>
 
             {/* Electrical Installation request */}
-            <div className="px-5 py-4">
+            <div className="ep-action-row px-5 py-4">
               <div className="flex items-start justify-between gap-3 mb-3">
                 <div>
                   <p className="font-semibold text-sm" style={{ fontFamily: "var(--font-display)", color: "#1a2540" }}>
@@ -316,7 +318,7 @@ export default function EmployerDashboard({ onAddToast }: EmployerDashboardProps
           </Card>
 
           {/* Organisation details */}
-          <Card title="Organisation Details">
+          <Card title="Organisation details">
             <div className="px-5 py-4 space-y-3">
               {[
                 { key: "Name", val: "Nessie Nursery" },
@@ -326,7 +328,7 @@ export default function EmployerDashboard({ onAddToast }: EmployerDashboardProps
                 { key: "Legal status", val: "Limited Company" },
                 { key: "Employees", val: "22" },
               ].map(({ key, val }) => (
-                <div key={key} className="flex gap-4">
+                <div key={key} className="ep-action-row flex gap-4 -mx-5 px-5 py-1.5">
                   <dt className="w-32 text-xs flex-shrink-0" style={{ color: "#5b6a8a" }}>{key}</dt>
                   <dd className="text-sm" style={{ color: "#1a2540" }}>{val}</dd>
                 </div>
@@ -345,12 +347,12 @@ export default function EmployerDashboard({ onAddToast }: EmployerDashboardProps
         {/* Right column */}
         <div className="flex flex-col gap-5">
           {/* Due diligence */}
-          <Card title="Due Diligence Checklist">
+          <Card title="Due diligence checklist">
             <ul>
               {ddItems.map((item) => (
                 <li
                   key={item.label}
-                  className="flex items-center justify-between px-5 py-3 border-b last:border-b-0"
+                  className="ep-action-row flex items-center justify-between px-5 py-3 border-b last:border-b-0"
                   style={{ borderColor: "#eef2f7" }}
                 >
                   <span className="text-sm" style={{ color: "#1a2540" }}>{item.label}</span>
@@ -383,7 +385,7 @@ export default function EmployerDashboard({ onAddToast }: EmployerDashboardProps
             ].map((m, i) => (
               <button
                 key={i}
-                className="w-full flex items-start gap-3 px-5 py-3 border-b last:border-b-0 text-left transition-colors hover:bg-ep-blue-lighter"
+                className="ep-action-row w-full flex items-start gap-3 px-5 py-3 border-b last:border-b-0 text-left"
                 style={{ borderColor: "#eef2f7" }}
                 aria-label={`Message from ${m.sender}: ${m.subject}`}
               >
