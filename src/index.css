@@ -353,6 +353,17 @@ textarea {
   box-shadow: inset 3px 0 0 #4b82c8;
   transform: none;
 }
+
+/* Shared row affordance for dashboard sections. */
+.ep-action-row {
+  transition: background-color 0.12s ease, box-shadow 0.12s ease;
+}
+
+.ep-action-row:hover,
+.ep-action-row:focus-within {
+  background-color: #f2f7fd;
+  box-shadow: inset 3px 0 0 #1b5db4;
+}
 @media (prefers-reduced-motion: reduce) {
   .ep-card-interactive:hover {
     transform: none;
