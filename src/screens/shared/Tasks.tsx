@@ -140,15 +140,15 @@ export default function Tasks({ role, onAddToast }: TasksProps) {
             style={{ backgroundColor: "#1b5db4", color: "#fff", fontFamily: "var(--font-display)" }}
             onClick={() => setShowAddTask(true)}
           >
-            <Plus size={15} /> Add task
+            <Plus size={16} /> Add task
           </button>
         )}
       </div>
 
       {/* Search + filter toolbar */}
-      <div className="flex flex-col sm:flex-row gap-3 mb-4">
+      <div className="ep-toolbar flex flex-col sm:flex-row gap-3 mb-4">
         <div className="relative flex-1">
-          <Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2" style={{ color: "#9ca3af" }} />
+          <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2" style={{ color: "#9ca3af" }} />
           <input
             type="search"
             value={search}
