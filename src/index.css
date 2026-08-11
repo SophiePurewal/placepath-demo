@@ -366,7 +366,7 @@ textarea {
 
 .ep-action-row:hover,
 .ep-action-row:focus-within {
-  background-color: #f2f7fd;
+  background-color: #f2f7fd !important;
   box-shadow: inset 3px 0 0 #1b5db4;
 }
 @media (prefers-reduced-motion: reduce) {
