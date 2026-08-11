@@ -165,7 +165,7 @@ export default function Employers({ onNavigate, onSelectEmployer }: EmployersPro
               <button
                 key={e.id}
                 onClick={() => openDetail(e.id)}
-                className="w-full flex items-start gap-4 text-left"
+                className="ep-action-row w-full flex items-start gap-4 text-left"
                 style={{
                   paddingTop: 14,
                   paddingBottom: 14,
