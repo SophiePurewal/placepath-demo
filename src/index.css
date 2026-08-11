@@ -1,0 +1,329 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap');
+@import 'tailwindcss';
+
+@theme inline {
+  --color-ep-navy: #1a2540;
+  --color-ep-blue: #1b5db4;
+  --color-ep-blue-mid: #4b82c8;
+  --color-ep-blue-light: #ebf3fc;
+  --color-ep-blue-lighter: #f2f7fd;
+  --color-ep-surface: #eef2f7;
+  --color-ep-white: #ffffff;
+  --color-ep-border: #d5e2f0;
+  --color-ep-text: #1a2540;
+  --color-ep-muted: #5b6a8a;
+  --color-ep-success: #15803d;
+  --color-ep-success-bg: #f0fdf4;
+  --color-ep-warning: #b45309;
+  --color-ep-warning-bg: #fffbeb;
+  --color-ep-error: #b91c1c;
+  --color-ep-error-bg: #fef2f2;
+  --color-ep-draft: #6b7280;
+  --color-ep-draft-bg: #f3f4f6;
+
+  --font-sans: 'Inter', system-ui, sans-serif;
+  --font-display: 'DM Sans', system-ui, sans-serif;
+
+  /* ── Unified 12 px radius system ────────────────────────────────────────── */
+  /* rounded-sm/md/lg/xl → 12 px  |  rounded-2xl → 16 px (dialogs/sheets)   */
+  --radius-sm:  6px;
+  --radius-md:  12px;
+  --radius-lg:  12px;
+  --radius-xl:  12px;
+  --radius-2xl: 16px;
+  --radius-3xl: 20px;
+}
+
+/* ── Spacing system ──────────────────────────────────────────────────────── */
+:root {
+  /* Page gutters: 16px mobile → 24px desktop */
+  --page-x: clamp(1rem, 4vw, 1.5rem);
+  --page-y: clamp(1rem, 3vw, 1.5rem);
+
+  /* Section gap: 24px mobile → 32px desktop */
+  --gap-section: clamp(1.5rem, 3vw, 2rem);
+
+  /* Card gap: 16px mobile → 20px desktop */
+  --gap-card: clamp(1rem, 2vw, 1.25rem);
+
+  /* Min grid column: adapts to viewport */
+  --grid-min: clamp(280px, 45vw, 340px);
+}
+
+/* ── Fluid type scale ────────────────────────────────────────────────────── */
+:root {
+  /* Page title: 28px mobile → 40px desktop */
+  --text-page-title: clamp(1.75rem, 4vw + 0.25rem, 2.5rem);
+  /* Section title (Tasks, Messages heading): 22px → 28px */
+  --text-section-title: clamp(1.375rem, 3vw + 0.25rem, 1.75rem);
+  /* Card section heading (uppercase label): stays compact */
+  --text-card-label: 0.75rem;   /* 12px uppercase label */
+  /* Card content heading: 18px */
+  --text-card-heading: 1.125rem;
+  /* Body: 16px */
+  --text-body: 1rem;
+  /* Supporting: 14px */
+  --text-support: 0.875rem;
+  /* Meta / status: 14px */
+  --text-meta: 0.875rem;
+}
+
+/* ── Typography utility classes ──────────────────────────────────────────── */
+.ep-page-title {
+  font-family: var(--font-display);
+  font-size: var(--text-page-title);
+  font-weight: 700;
+  line-height: 1.15;
+  color: #1a2540;
+}
+
+.ep-section-title {
+  font-family: var(--font-display);
+  font-size: var(--text-section-title);
+  font-weight: 700;
+  line-height: 1.2;
+  color: #1a2540;
+}
+
+/* ── Box sizing ──────────────────────────────────────────────────────────── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-sans);
+  font-size: 1rem;        /* 16px — never smaller */
+  line-height: 1.5;
+  color: #1a2540;
+  background-color: #eef2f7; /* slightly darker so white tiles read as elevated */
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  line-height: 1.25;
+  margin: 0;
+}
+
+/* ── Skip link ───────────────────────────────────────────────────────────── */
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: 1rem;
+  z-index: 9999;
+  padding: 0.5rem 1rem;
+  background: #1b5db4;
+  color: #fff;
+  font-size: 0.875rem;
+  font-weight: 600;
+  border-radius: 0 0 6px 6px;
+  text-decoration: none;
+  transition: top 0.1s;
+}
+.skip-link:focus {
+  top: 0;
+  outline: 3px solid #fff;
+  outline-offset: 2px;
+}
+
+/* ── Link interaction states ─────────────────────────────────────────────── */
+a:not([class*="btn"]):not([role="button"]) {
+  color: #1b5db4;
+  text-decoration: none;
+  transition: color 0.12s, text-decoration-color 0.12s;
+}
+
+a:not([class*="btn"]):not([role="button"]):hover {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
+  color: #154d9a;
+}
+
+a:not([class*="btn"]):not([role="button"]):visited {
+  color: #4b3eb4;
+}
+
+.ep-link {
+  color: #1b5db4;
+  text-decoration: none;
+  transition: color 0.12s, text-decoration-color 0.12s;
+}
+.ep-link:hover {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
+  color: #154d9a;
+}
+
+/* ── Focus ring (global) ─────────────────────────────────────────────────── */
+:focus-visible {
+  outline: 3px solid #1b5db4;
+  outline-offset: 3px;
+  border-radius: 3px;
+}
+
+nav button:focus-visible {
+  outline: 3px solid #7db8f5;
+  outline-offset: -2px;
+}
+
+/* ── Sidebar nav-link underline interaction ──────────────────────────────── */
+.nav-btn:hover .nav-label,
+.nav-btn:focus-visible .nav-label {
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 4px;
+}
+
+/* ── Button interaction states ───────────────────────────────────────────── */
+button:not(:disabled) {
+  cursor: pointer;
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+/* ── Touch target enforcement ────────────────────────────────────────────── */
+/* Interactive controls always meet 44×44 minimum */
+button,
+[role="button"],
+input[type="checkbox"],
+input[type="radio"] {
+  min-height: 44px;
+}
+
+/* Icon-only buttons inside cards can be smaller */
+.icon-btn {
+  min-height: unset;
+  min-width: unset;
+}
+
+/* ── Form controls ───────────────────────────────────────────────────────── */
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="search"],
+input[type="date"],
+select,
+textarea {
+  font-size: 1rem;    /* prevent iOS zoom (must be ≥16px) */
+}
+
+/* ── Mobile-first layout utilities ──────────────────────────────────────────*/
+/* Page wrapper — consistent gutters, no max-width on pages */
+.ep-page {
+  padding: var(--page-y) var(--page-x);
+}
+
+/* Fluid auto-fit dashboard grid */
+.ep-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(var(--grid-min), 1fr));
+  gap: var(--gap-card);
+}
+
+/* ── Card / surface elevation system ─────────────────────────────────────── */
+/* White tiles lift off the #eef2f7 background via shadow — no outlines      */
+.ep-card {
+  background: #ffffff;
+  border-radius: 0;
+  box-shadow: none;
+  border-top: 1px solid #dfe7f1;
+  border-bottom: 1px solid #dfe7f1;
+  overflow: hidden;
+}
+
+/* Section-led workspace used in place of a dashboard card grid. */
+.ep-dashboard-workspace {
+  display: grid;
+  grid-template-columns: 1fr;
+  background: #ffffff;
+  border-top: 1px solid #dfe7f1;
+}
+
+.ep-section {
+  min-width: 0;
+  background: #ffffff;
+  border-bottom: 1px solid #dfe7f1;
+}
+
+.ep-status-band {
+  background: transparent;
+  border-top: 1px solid #dfe7f1;
+  border-bottom: 1px solid #dfe7f1;
+}
+
+@media (min-width: 768px) {
+  .ep-dashboard-workspace {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .ep-dashboard-workspace > .ep-section:nth-child(odd) {
+    border-right: 1px solid #dfe7f1;
+  }
+}
+
+/* Interactive tile: hover lift (respects reduced-motion) */
+.ep-card-interactive {
+  transition: box-shadow 0.15s ease, transform 0.15s ease;
+  cursor: pointer;
+}
+.ep-card-interactive:hover {
+  box-shadow: 0 7px 20px rgba(20, 35, 65, 0.16);
+  transform: translateY(-1px);
+}
+@media (prefers-reduced-motion: reduce) {
+  .ep-card-interactive:hover {
+    transform: none;
+  }
+}
+
+/* Lighter surface for stat strips and secondary panels */
+.ep-surface {
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(20, 35, 65, 0.08);
+  overflow: hidden;
+}
+
+/* ── Scrollbar ───────────────────────────────────────────────────────────── */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #c7d7ec;
+  border-radius: 3px;
+}
+
+/* ── Reduced motion ──────────────────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
