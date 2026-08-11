@@ -244,14 +244,28 @@ export default function Sidebar({
         })}
       </nav>
 
-      {/* User + collapse */}
+      {/* Sidebar controls + user */}
       <div
         className="border-t"
         style={{ borderColor: "rgba(255,255,255,0.1)" }}
       >
+        {/* Collapse control sits above the signed-in user */}
+        <button
+          onClick={() => onCollapse(!collapsed)}
+          className={`sidebar-collapse hidden lg:flex w-full items-center py-2.5 transition-colors ${collapsed ? "justify-center px-2" : "gap-2 px-4"}`}
+          style={{ color: "rgba(200,214,236,0.75)", fontSize: 13 }}
+          aria-label={collapsed ? "Expand navigation" : "Collapse navigation"}
+        >
+          {collapsed ? <ChevronRight size={17} /> : <ChevronLeft size={17} />}
+          {!collapsed && <span>Collapse</span>}
+        </button>
+
         {/* User info */}
         {!collapsed && (
-          <div className="flex items-center gap-3 px-4 py-3">
+          <div
+            className="flex items-center gap-3 px-4 py-3 border-t"
+            style={{ borderColor: "rgba(255,255,255,0.08)" }}
+          >
             <div
               className="flex-shrink-0 flex items-center justify-center rounded-full text-sm font-semibold"
               style={{
@@ -281,7 +295,7 @@ export default function Sidebar({
           </div>
         )}
 
-        {/* Sign out + collapse toggle */}
+        {/* Sign out */}
         <div
           className="flex items-center px-3 py-2 gap-1 border-t"
           style={{ borderColor: "rgba(255,255,255,0.08)" }}
@@ -294,14 +308,6 @@ export default function Sidebar({
           >
             <LogOut size={16} />
             {!collapsed && <span className="nav-label">Sign out</span>}
-          </button>
-          <button
-            onClick={() => onCollapse(!collapsed)}
-            className="hidden lg:flex items-center justify-center p-2 rounded transition-colors ml-auto"
-            style={{ color: "rgba(200,214,236,0.7)" }}
-            aria-label={collapsed ? "Expand navigation" : "Collapse navigation"}
-          >
-            {collapsed ? <ChevronRight size={16} /> : <ChevronLeft size={16} />}
           </button>
         </div>
       </div>
