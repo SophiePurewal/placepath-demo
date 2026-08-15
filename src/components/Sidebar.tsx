@@ -165,7 +165,7 @@ export default function Sidebar({
             <button
               key={item.id}
               onClick={() => navigate(item.id)}
-              className={`w-full flex items-center gap-3 text-left transition-colors relative ${collapsed ? "justify-center px-2" : "px-3"}`}
+              className={`pp-nav-item w-full flex items-center gap-3 text-left transition-colors relative ${collapsed ? "justify-center px-2" : "px-3"}`}
               style={{
                 fontFamily: "var(--font-display)",
                 fontWeight: active ? 600 : 500,
