@@ -262,3 +262,26 @@ main .ep-link {
   background-color: #eef5ff !important;
   box-shadow: inset 3px 0 0 #1b5db4;
 }
+
+
+/* Recent placements: use one clean full-row hover target */
+.pp-recent td button:hover,
+.pp-recent td button:focus-visible {
+  background: transparent !important;
+  box-shadow: none !important;
+}
+.pp-recent tbody tr td {
+  transition: background-color .14s ease, box-shadow .14s ease;
+}
+.pp-recent tbody tr:hover td,
+.pp-recent tbody tr:focus-within td {
+  background-color: #eef5ff;
+}
+.pp-recent tbody tr:hover td:first-child,
+.pp-recent tbody tr:focus-within td:first-child {
+  box-shadow: inset 3px 0 0 #1b5db4;
+}
+.pp-recent tbody tr:hover td button,
+.pp-recent tbody tr:focus-within td button {
+  color: #154d9a !important;
+}
