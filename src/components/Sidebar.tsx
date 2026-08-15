@@ -1,5 +1,6 @@
 import { useEffect, useRef } from "react";
 import ProfileAvatar from "./ProfileAvatar";
+import BrandLogo from "./BrandLogo";
 import {
   Home,
   CheckSquare,
@@ -156,38 +157,14 @@ export default function Sidebar({
     <div className="flex flex-col h-full">
       {/* Logo */}
       <div
-        className="flex items-center px-5 border-b"
+        className={`flex items-center border-b ${collapsed ? "justify-center px-2" : "px-5"}`}
         style={{
           height: 64,
           borderColor: "rgba(255,255,255,0.1)",
           minHeight: 64,
         }}
       >
-        {!collapsed && (
-          <span
-            style={{
-              fontFamily: "var(--font-display)",
-              fontWeight: 700,
-              fontSize: 22,
-              color: "#ffffff",
-              letterSpacing: "-0.5px",
-            }}
-          >
-            Place<span style={{ color: "#7db8f5" }}>Path</span>
-          </span>
-        )}
-        {collapsed && (
-          <span
-            style={{
-              fontFamily: "var(--font-display)",
-              fontWeight: 700,
-              fontSize: 20,
-              color: "#7db8f5",
-            }}
-          >
-            PP
-          </span>
-        )}
+        <BrandLogo size="md" dark markOnly={collapsed} />
         {/* mobile close */}
         <button
           ref={closeButtonRef}
