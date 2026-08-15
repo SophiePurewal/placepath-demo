@@ -1,397 +1,224 @@
 import { useState } from "react";
 import {
-  CheckSquare,
-  Square,
-  ChevronDown,
-  ChevronUp,
-  Plus,
-  ArrowRight,
-  Clock,
-  MapPin,
-  MessageSquare,
+  Users,
+  Briefcase,
+  Building2,
+  ClipboardCheck,
   Calendar,
-  AlertTriangle,
-  ExternalLink,
+  MessageSquare,
+  ArrowRight,
+  Plus,
+  Check,
 } from "lucide-react";
-import { StatusBadge } from "../../components/StatusBadge";
-import {
-  tasks as allTasks,
-  placementOffers,
-  employerLocations,
-  messages,
-  visits,
-  placements,
-} from "../../data";
-import type { Screen } from "../../components/Sidebar";
+import { placements, messages, visits, tasks as initialTasks, employers } from "../../data";
 import type { Task } from "../../data";
+import type { Screen } from "../../components/Sidebar";
 
 interface DashboardProps {
   onNavigate: (screen: Screen, payload?: unknown) => void;
   onAddToast: (type: "success" | "error" | "info", message: string) => void;
 }
 
-function Card({
-  title,
-  action,
-  onAction,
-  children,
-}: {
-  title: string;
-  action?: string;
-  onAction?: () => void;
-  children: React.ReactNode;
-}) {
+const statusLabel: Record<string, string> = {
+  active: "In progress",
+  "ready-to-confirm": "Confirmed",
+  "awaiting-employer": "Awaiting employer",
+  "due-diligence": "Due diligence",
+  draft: "Draft",
+  "at-risk": "At risk",
+  completed: "Completed",
+  cancelled: "Cancelled",
+};
+
+const statusStyle: Record<string, { background: string; color: string }> = {
+  active: { background: "#eaf3ff", color: "#1b5db4" },
+  "ready-to-confirm": { background: "#eaf8f0", color: "#15803d" },
+  "awaiting-employer": { background: "#fff7e6", color: "#b45309" },
+  "due-diligence": { background: "#fff7e6", color: "#b45309" },
+  draft: { background: "#f3f4f6", color: "#6b7280" },
+  "at-risk": { background: "#fef2f2", color: "#b91c1c" },
+  completed: { background: "#eaf8f0", color: "#15803d" },
+  cancelled: { background: "#f3f4f6", color: "#6b7280" },
+};
+
+function SectionHeader({ title, action, onAction }: { title: string; action: string; onAction: () => void }) {
   return (
-    <section className="ep-panel">
-      <div
-        className="flex items-center justify-between px-5 py-4 border-b"
-        style={{ borderColor: "#eef2f7" }}
-      >
-        <h2
-          className="text-base font-semibold"
-          style={{ fontFamily: "var(--font-display)", color: "#1a2540" }}
-        >
-          {title}
-        </h2>
-        {action && onAction && (
-          <button
-            onClick={onAction}
-            className="text-xs font-medium flex items-center gap-1"
-            style={{ color: "#1b5db4", fontFamily: "var(--font-display)" }}
-          >
-            {action} <ArrowRight size={12} />
-          </button>
-        )}
-      </div>
-      <div>{children}</div>
-    </section>
+    <div className="flex items-center justify-between px-5 py-4 border-b" style={{ borderColor: "#e8edf4" }}>
+      <h2 className="text-base font-semibold" style={{ color: "#1a2540", fontFamily: "var(--font-display)" }}>{title}</h2>
+      <button onClick={onAction} className="text-xs font-semibold flex items-center gap-1" style={{ color: "#1b5db4" }}>
+        {action}<ArrowRight size={13} />
+      </button>
+    </div>
   );
 }
 
 export default function Dashboard({ onNavigate, onAddToast }: DashboardProps) {
-  const [taskList, setTaskList] = useState<Task[]>(allTasks);
-  const [msgExpanded, setMsgExpanded] = useState(false);
+  const [tasks, setTasks] = useState<Task[]>(initialTasks);
+  const activePlacements = placements.filter((p) => p.status === "active").length;
+  const studentCount = placements.reduce((total, placement) => total + placement.students, 0);
+  const openTasks = tasks.filter((task) => !task.done).length;
 
   const toggleTask = (id: string) => {
-    setTaskList((prev) =>
-      prev.map((t) => {
-        if (t.id !== id) return t;
-        if (!t.done) onAddToast("success", "Task marked as complete.");
-        return { ...t, done: !t.done };
-      })
-    );
+    setTasks((current) => current.map((task) => task.id === id ? { ...task, done: !task.done } : task));
+    onAddToast("success", "Task updated.");
   };
 
-  const statusSummary: Record<string, { count: number; color: string }> = {
-    Active: { count: placements.filter((p) => p.status === "active").length, color: "#22c55e" },
-    "At Risk": { count: placements.filter((p) => p.status === "at-risk").length, color: "#ef4444" },
-    "Awaiting Employer": { count: placements.filter((p) => p.status === "awaiting-employer").length, color: "#3b82f6" },
-    Draft: { count: placements.filter((p) => p.status === "draft").length, color: "#9ca3af" },
-  };
-
-  const shownMessages = msgExpanded ? messages : messages.slice(0, 3);
+  const metrics = [
+    { label: "Students on placements", value: studentCount, change: "+12 this term", icon: Users, bg: "#eaf2ff", fg: "#2f66d4" },
+    { label: "Active placements", value: activePlacements, change: "+8 this term", icon: Briefcase, bg: "#eaf8f0", fg: "#1aa866" },
+    { label: "Active employers", value: employers.length, change: "+4 this term", icon: Building2, bg: "#f2ebff", fg: "#6f42c1" },
+    { label: "Tasks due", value: openTasks, change: "+5 this week", icon: ClipboardCheck, bg: "#fff5dd", fg: "#e49a14" },
+  ];
 
   return (
     <div className="ep-page">
-      {/* Welcome bar */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
         <div>
-          <h1
-            className="ep-page-title"
-            style={{ fontFamily: "var(--font-display)", fontWeight: 700, color: "#1a2540" }}
-          >
-            Welcome back, Sarah
-          </h1>
-          <p className="text-sm mt-0.5" style={{ color: "#5b6a8a" }}>
-            Monday, 11 August 2026 · Northbridge College
-          </p>
+          <h1 className="ep-page-title">Dashboard</h1>
+          <p className="text-sm mt-1" style={{ color: "#5b6a8a" }}>Placement activity across Northbridge College</p>
         </div>
         <button
           onClick={() => onNavigate("create-placement")}
-          className="flex items-center gap-2 rounded-md px-4 py-2.5 text-sm font-semibold transition-opacity hover:opacity-90"
+          className="flex items-center justify-center gap-2 rounded-lg px-4 py-2.5 text-sm font-semibold"
           style={{ backgroundColor: "#1b5db4", color: "#fff", fontFamily: "var(--font-display)" }}
         >
-          <Plus size={16} />
-          New placement
+          <Plus size={17} /> New placement
         </button>
       </div>
 
-      {/* Status summary strip — follows the same flat pattern as the student home */}
-      <div className="ep-surface p-4 mb-6">
-        <div className="flex flex-wrap items-center gap-x-8 gap-y-4">
-        {Object.entries(statusSummary).map(([label, { count, color }]) => (
-          <div key={label} className="flex items-center gap-3">
-            <span
-              className="w-2 h-2 rounded-full flex-shrink-0"
-              style={{ backgroundColor: color }}
-              aria-hidden="true"
-            />
-            <span className="text-2xl font-bold" style={{ fontFamily: "var(--font-display)", color: "#1a2540" }}>
-              {count}
-            </span>
-            <span className="text-sm" style={{ color: "#5b6a8a" }}>{label}</span>
+      <section className="ep-panel mb-5 overflow-hidden">
+        <div className="grid lg:grid-cols-[1fr_280px] items-stretch">
+          <div className="px-7 py-7 lg:py-8 flex flex-col justify-center">
+            <h2 className="text-xl font-semibold mb-2" style={{ color: "#1a2540", fontFamily: "var(--font-display)" }}>Welcome back, Sarah</h2>
+            <p className="text-sm" style={{ color: "#5b6a8a" }}>Here’s what’s happening with your placements today.</p>
           </div>
-        ))}
+          <div className="hidden lg:flex items-end justify-center px-8 pt-5" style={{ background: "linear-gradient(135deg,#f6f9ff,#eef4ff)" }} aria-hidden="true">
+            <div className="relative w-36 h-24">
+              <div className="absolute left-3 bottom-0 w-7 h-16 rounded-t-full" style={{ backgroundColor: "#9bd7ad" }} />
+              <div className="absolute left-7 bottom-0 w-10 h-5 rounded" style={{ backgroundColor: "#56708e" }} />
+              <div className="absolute right-2 bottom-2 w-20 h-14 rounded-xl" style={{ backgroundColor: "#dce8ff" }} />
+              <div className="absolute right-8 bottom-6 w-12 h-9 rounded-md" style={{ backgroundColor: "#1a2540" }} />
+              <div className="absolute right-6 bottom-11 w-12 h-12 rounded-full" style={{ backgroundColor: "#4b82c8" }} />
+            </div>
+          </div>
         </div>
-      </div>
+      </section>
 
-      {/* Main grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 items-start">
-        {/* Tasks */}
-        <Card title="Outstanding tasks" action="View all" onAction={() => onNavigate("tasks")}>
-          <ul>
-            {taskList.slice(0, 5).map((t) => (
-              <li
-                key={t.id}
-                className="ep-action-row flex items-start gap-3 px-5 py-3 border-b last:border-b-0"
-                style={{ borderColor: "#eef2f7" }}
-              >
-                <button
-                  onClick={() => toggleTask(t.id)}
-                  className="mt-0.5 flex-shrink-0"
-                  style={{ color: t.done ? "#22c55e" : "#d5e2f0" }}
-                  aria-label={t.done ? "Mark incomplete" : "Mark complete"}
-                >
-                  {t.done ? <CheckSquare size={18} /> : <Square size={18} />}
-                </button>
-                <div className="flex-1 min-w-0">
-                  <p
-                    className="text-sm"
-                    style={{
-                      color: t.done ? "#5b6a8a" : "#1a2540",
-                      textDecoration: t.done ? "line-through" : "none",
-                    }}
-                  >
-                    {t.title}
-                  </p>
-                  <p className="text-xs mt-0.5 flex items-center gap-1" style={{ color: t.priority === "high" && !t.done ? "#b91c1c" : "#5b6a8a" }}>
-                    <Clock size={11} />
-                    {t.due}
-                    {t.priority === "high" && !t.done && (
-                      <span className="ml-1 text-xs font-medium" style={{ color: "#b91c1c" }}>
-                        · Urgent
-                      </span>
-                    )}
-                  </p>
-                </div>
-              </li>
-            ))}
-          </ul>
-        </Card>
-
-        {/* Placement Offers */}
-        <Card title="Placement offers" action="View all" onAction={() => onNavigate("placements")}>
-          <ul>
-            {placementOffers.map((o) => (
-              <li key={o.id}>
-                <button
-                  onClick={() => onNavigate("employer-detail")}
-                  className="ep-action-row w-full flex items-center justify-between px-5 py-3 border-b text-left"
-                  style={{ borderColor: "#eef2f7" }}
-                  aria-label={`View offer from ${o.contact} at ${o.employer}`}
-                >
-                  <div className="min-w-0 flex-1">
-                    <p className="text-sm font-medium" style={{ color: "#1a2540", fontFamily: "var(--font-display)" }}>
-                      {o.contact}
-                    </p>
-                    <p className="text-xs" style={{ color: "#5b6a8a" }}>
-                      {o.employer}
-                    </p>
-                    <p className="text-xs mt-0.5" style={{ color: "#5b6a8a" }}>
-                      {o.time}
-                    </p>
-                  </div>
-                  <StatusBadge status={o.status} />
-                </button>
-              </li>
-            ))}
-          </ul>
-        </Card>
-
-        {/* Employer Locations */}
-        <Card title="Employer locations" action="View map" onAction={() => onNavigate("employers")}>
-          {/* Map placeholder */}
-          <div
-            className="mx-5 mt-4 mb-3 rounded-lg overflow-hidden relative"
-            style={{ height: 140, backgroundColor: "#e8f0f8" }}
-          >
-            <div className="absolute inset-0 flex items-center justify-center">
-              <div className="text-center">
-                <MapPin size={28} style={{ color: "#1b5db4", margin: "0 auto" }} />
-                <p className="text-xs mt-1" style={{ color: "#5b6a8a" }}>Northbridge and surrounding area</p>
+      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 mb-5">
+        {metrics.map(({ label, value, change, icon: Icon, bg, fg }) => (
+          <section key={label} className="ep-panel p-5">
+            <div className="flex items-start gap-4">
+              <div className="w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0" style={{ backgroundColor: bg, color: fg }}>
+                <Icon size={22} />
+              </div>
+              <div>
+                <p className="text-2xl font-bold" style={{ color: "#1a2540", fontFamily: "var(--font-display)" }}>{value}</p>
+                <p className="text-sm mt-0.5" style={{ color: "#1a2540" }}>{label}</p>
+                <p className="text-xs mt-3 font-medium" style={{ color: "#1aa866" }}>{change}</p>
               </div>
             </div>
-            {/* Dot markers */}
-            {[
-              { top: "40%", left: "35%" },
-              { top: "55%", left: "55%" },
-              { top: "30%", left: "60%" },
-            ].map((pos, i) => (
-              <div
-                key={i}
-                className="absolute w-3 h-3 rounded-full border-2"
-                style={{
-                  top: pos.top,
-                  left: pos.left,
-                  backgroundColor: "#1b5db4",
-                  borderColor: "#fff",
-                  transform: "translate(-50%,-50%)",
-                }}
-              />
-            ))}
+          </section>
+        ))}
+      </div>
+
+      <div className="grid grid-cols-1 xl:grid-cols-[minmax(0,1fr)_320px] gap-5 items-start">
+        <section className="ep-panel">
+          <SectionHeader title="Recent placements" action="View all" onAction={() => onNavigate("placements")} />
+          <div className="overflow-x-auto">
+            <table className="w-full text-left" style={{ minWidth: 760 }}>
+              <thead>
+                <tr className="text-xs uppercase tracking-wide" style={{ color: "#7b879c", backgroundColor: "#fbfcfe" }}>
+                  <th className="px-5 py-3 font-medium">Placement</th>
+                  <th className="px-5 py-3 font-medium">Employer</th>
+                  <th className="px-5 py-3 font-medium">Dates</th>
+                  <th className="px-5 py-3 font-medium">Students</th>
+                  <th className="px-5 py-3 font-medium">Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                {placements.slice(0, 5).map((placement) => {
+                  const style = statusStyle[placement.status] ?? statusStyle.draft;
+                  return (
+                    <tr key={placement.id} className="border-t" style={{ borderColor: "#edf1f6" }}>
+                      <td className="px-5 py-4">
+                        <button onClick={() => onNavigate("placements")} className="text-left font-semibold text-sm" style={{ color: "#1a2540", fontFamily: "var(--font-display)" }}>
+                          {placement.title}
+                        </button>
+                        <p className="text-xs mt-1" style={{ color: "#5b6a8a" }}>{placement.course}</p>
+                      </td>
+                      <td className="px-5 py-4 text-sm" style={{ color: "#334155" }}>{placement.employer}</td>
+                      <td className="px-5 py-4 text-xs" style={{ color: "#5b6a8a" }}>{placement.startDate} – {placement.endDate}</td>
+                      <td className="px-5 py-4 text-sm" style={{ color: "#334155" }}>{placement.students}</td>
+                      <td className="px-5 py-4">
+                        <span className="inline-flex rounded-md px-2.5 py-1 text-xs font-medium" style={{ backgroundColor: style.background, color: style.color }}>
+                          {statusLabel[placement.status] ?? placement.status}
+                        </span>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
           </div>
-          <ul>
-            {employerLocations.map((l) => (
-              <li key={l.id}>
-                <button
-                  onClick={() => onNavigate("employer-detail")}
-                  className="ep-action-row w-full flex items-center justify-between px-5 py-3 border-b text-left"
-                  style={{ borderColor: "#eef2f7" }}
-                  aria-label={`View ${l.name} — ${l.placements} placements`}
-                >
-                  <div className="flex items-center gap-2 min-w-0">
-                    <MapPin size={14} style={{ color: "#1b5db4", flexShrink: 0 }} />
-                    <div className="min-w-0">
-                      <p className="text-sm font-medium" style={{ color: "#1a2540", fontFamily: "var(--font-display)" }}>
-                        {l.name}
-                      </p>
-                      <p className="text-xs truncate" style={{ color: "#5b6a8a" }}>
-                        {l.address}
-                      </p>
-                    </div>
-                  </div>
-                  <span
-                    className="flex-shrink-0 text-xs font-semibold ml-2"
-                    style={{ color: "#1b5db4", fontFamily: "var(--font-display)" }}
-                  >
-                    {l.placements} placements
-                  </span>
-                </button>
-              </li>
-            ))}
-          </ul>
-        </Card>
+        </section>
 
-        {/* Messages */}
-        <Card title="Messages" action="View all" onAction={() => onNavigate("messages")}>
-          <ul>
-            {shownMessages.map((m) => (
-              <li
-                key={m.id}
-                className="ep-action-row flex items-start gap-3 px-5 py-3 border-b last:border-b-0 cursor-pointer"
-                style={{ borderColor: "#eef2f7" }}
-              >
-                <div
-                  className="flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center mt-0.5"
-                  style={{ backgroundColor: m.unread ? "#ebf3fc" : "#f3f4f6" }}
-                >
-                  <MessageSquare size={14} style={{ color: m.unread ? "#1b5db4" : "#9ca3af" }} />
-                </div>
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-baseline justify-between gap-2">
-                    <p
-                      className="text-sm font-medium truncate"
-                      style={{ color: "#1a2540", fontFamily: "var(--font-display)", fontWeight: m.unread ? 600 : 400 }}
-                    >
-                      {m.sender}
-                    </p>
-                    <span className="text-xs flex-shrink-0" style={{ color: "#5b6a8a" }}>
-                      {m.time}
-                    </span>
+        <div className="grid gap-5">
+          <section className="ep-panel">
+            <SectionHeader title="Upcoming visits" action="View all" onAction={() => onNavigate("visits")} />
+            <div>
+              {visits.slice(0, 3).map((visit, index) => (
+                <div key={visit.id} className="flex gap-3 px-5 py-4 border-b last:border-b-0" style={{ borderColor: "#edf1f6" }}>
+                  <div className="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0" style={{ backgroundColor: "#f2f7fd", color: "#1b5db4" }}>
+                    <Calendar size={18} />
                   </div>
-                  <p className="text-sm truncate mt-0.5" style={{ color: "#5b6a8a" }}>
-                    {m.subject}
-                  </p>
-                </div>
-                {m.unread && (
-                  <span
-                    className="w-2 h-2 rounded-full flex-shrink-0 mt-2"
-                    style={{ backgroundColor: "#1b5db4" }}
-                    aria-label="Unread"
-                  />
-                )}
-              </li>
-            ))}
-          </ul>
-          {messages.length > 3 && (
-            <button
-              className="flex items-center justify-center gap-1 w-full py-2.5 text-sm"
-              style={{ color: "#1b5db4", fontFamily: "var(--font-display)" }}
-              onClick={() => setMsgExpanded(!msgExpanded)}
-            >
-              {msgExpanded ? (
-                <>Show less <ChevronUp size={14} /></>
-              ) : (
-                <>Show {messages.length - 3} more <ChevronDown size={14} /></>
-              )}
-            </button>
-          )}
-        </Card>
-
-        {/* Upcoming Visits */}
-        <Card title="Upcoming visits" action="View all" onAction={() => onNavigate("visits")}>
-          <ul>
-            {visits.map((v) => (
-              <li
-                key={v.id}
-                className="ep-action-row flex items-start gap-3 px-5 py-3 border-b last:border-b-0"
-                style={{ borderColor: "#eef2f7" }}
-              >
-                <div
-                  className="flex-shrink-0 w-8 h-8 rounded-lg flex items-center justify-center"
-                  style={{ backgroundColor: "#ebf3fc" }}
-                >
-                  <Calendar size={14} style={{ color: "#1b5db4" }} />
-                </div>
-                <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium" style={{ color: "#1a2540", fontFamily: "var(--font-display)" }}>
-                    {v.student}
-                  </p>
-                  <p className="text-xs" style={{ color: "#5b6a8a" }}>
-                    {v.employer} · {v.type}
-                  </p>
-                  <p className="text-xs mt-0.5" style={{ color: "#5b6a8a" }}>
-                    {v.date}
-                  </p>
-                </div>
-              </li>
-            ))}
-          </ul>
-        </Card>
-
-        {/* Placements requiring attention */}
-        <Card title="Requires attention" action="View all" onAction={() => onNavigate("placements")}>
-          <ul>
-            {placements
-              .filter((p) => ["at-risk", "due-diligence", "awaiting-employer"].includes(p.status))
-              .map((p) => (
-                <li key={p.id}>
-                <button
-                  className="ep-action-row w-full flex items-start gap-3 px-5 py-3 border-b text-left"
-                  style={{ borderColor: "#eef2f7" }}
-                  onClick={() => onNavigate("placements")}
-                  aria-label={`View ${p.title} — ${p.status}`}
-                >
-                  {p.status === "at-risk" && (
-                    <AlertTriangle size={16} style={{ color: "#ef4444", flexShrink: 0, marginTop: 2 }} />
-                  )}
-                  {p.status !== "at-risk" && (
-                    <ExternalLink size={16} style={{ color: "#f59e0b", flexShrink: 0, marginTop: 2 }} />
-                  )}
-                  <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium" style={{ color: "#1a2540", fontFamily: "var(--font-display)" }}>
-                      {p.title}
-                    </p>
-                    <p className="text-xs" style={{ color: "#5b6a8a" }}>
-                      {p.employer} · {p.students} student{p.students !== 1 ? "s" : ""}
-                    </p>
+                  <div className="min-w-0">
+                    <p className="text-sm font-semibold" style={{ color: "#1a2540", fontFamily: "var(--font-display)" }}>{visit.type}</p>
+                    <p className="text-xs mt-1" style={{ color: "#5b6a8a" }}>{visit.student} · {visit.employer}</p>
+                    <p className="text-xs mt-1" style={{ color: "#7b879c" }}>{visit.date}</p>
                   </div>
-                  <StatusBadge status={p.status} />
-                </button>
-                </li>
+                </div>
               ))}
-          </ul>
-        </Card>
+            </div>
+          </section>
+
+          <section className="ep-panel">
+            <SectionHeader title="Messages" action="View all" onAction={() => onNavigate("messages")} />
+            <div>
+              {messages.slice(0, 3).map((message) => (
+                <button key={message.id} onClick={() => onNavigate("messages")} className="w-full flex items-start gap-3 px-5 py-4 border-b last:border-b-0 text-left ep-action-row" style={{ borderColor: "#edf1f6" }}>
+                  <div className="w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0" style={{ backgroundColor: message.unread ? "#eaf2ff" : "#f3f4f6", color: message.unread ? "#2f66d4" : "#7b879c" }}>
+                    <MessageSquare size={16} />
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <div className="flex justify-between gap-2">
+                      <p className="text-sm font-semibold truncate" style={{ color: "#1a2540", fontFamily: "var(--font-display)" }}>{message.sender}</p>
+                      <span className="text-xs flex-shrink-0" style={{ color: "#7b879c" }}>{message.time.split(" ")[0]}</span>
+                    </div>
+                    <p className="text-xs truncate mt-1" style={{ color: "#5b6a8a" }}>{message.subject}</p>
+                  </div>
+                </button>
+              ))}
+            </div>
+          </section>
+
+          <section className="ep-panel">
+            <SectionHeader title="Task overview" action="View all" onAction={() => onNavigate("tasks")} />
+            <div className="px-5 py-4">
+              <p className="text-3xl font-bold" style={{ color: "#1a2540", fontFamily: "var(--font-display)" }}>{openTasks}</p>
+              <p className="text-xs mt-1 mb-4" style={{ color: "#5b6a8a" }}>Outstanding tasks</p>
+              <div className="space-y-2">
+                {tasks.slice(0, 3).map((task) => (
+                  <button key={task.id} onClick={() => toggleTask(task.id)} className="w-full flex items-start gap-2 text-left py-2">
+                    <span className="w-5 h-5 rounded border flex items-center justify-center flex-shrink-0 mt-0.5" style={{ borderColor: task.done ? "#1aa866" : "#cbd5e1", backgroundColor: task.done ? "#1aa866" : "#fff", color: "#fff" }}>
+                      {task.done && <Check size={13} />}
+                    </span>
+                    <span className="text-xs leading-5" style={{ color: task.done ? "#7b879c" : "#334155", textDecoration: task.done ? "line-through" : "none" }}>{task.title}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+          </section>
+        </div>
       </div>
     </div>
   );
