@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Eye, EyeOff, AlertCircle } from "lucide-react";
+import BrandLogo from "../components/BrandLogo";
 
 type Role = "coordinator" | "employer" | "student";
 
@@ -46,17 +47,7 @@ export default function SignIn({ onSignIn }: SignInProps) {
         style={{ backgroundColor: "#1a2540" }}
       >
         <div>
-          <span
-            style={{
-              fontFamily: "var(--font-display)",
-              fontWeight: 700,
-              fontSize: 28,
-              color: "#ffffff",
-              letterSpacing: "-0.5px",
-            }}
-          >
-            Place<span style={{ color: "#7db8f5" }}>Path</span>
-          </span>
+          <BrandLogo size="lg" dark />
           <p className="mt-4 text-base" style={{ color: "rgba(200,214,236,0.8)", lineHeight: 1.6 }}>
             Connecting learning providers, employers and students throughout the placement lifecycle.
           </p>
@@ -77,17 +68,8 @@ export default function SignIn({ onSignIn }: SignInProps) {
       <div className="flex-1 flex items-center justify-center px-6 py-10">
         <div className="w-full max-w-md">
           {/* Mobile logo */}
-          <div className="lg:hidden mb-8 text-center">
-            <span
-              style={{
-                fontFamily: "var(--font-display)",
-                fontWeight: 700,
-                fontSize: 28,
-                color: "#1a2540",
-              }}
-            >
-              Place<span style={{ color: "#1b5db4" }}>Path</span>
-            </span>
+          <div className="lg:hidden mb-8 flex justify-center">
+            <BrandLogo size="lg" dark={false} />
           </div>
 
           <div>
