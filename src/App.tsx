@@ -92,14 +92,9 @@ function getPageTitle(s: Screen): string {
   return titles[s] ?? "PlacePath";
 }
 
-/** Shared PlacePath wordmark */
 function PlacePathLogo({ onClick }: { onClick: () => void }) {
   return (
-    <button
-      onClick={onClick}
-      className="flex items-center"
-      aria-label="PlacePath — go to dashboard"
-    >
+    <button onClick={onClick} className="flex items-center" aria-label="PlacePath — go to dashboard">
       <span
         style={{
           fontFamily: "var(--font-display)",
@@ -116,40 +111,18 @@ function PlacePathLogo({ onClick }: { onClick: () => void }) {
   );
 }
 
-function PlaceholderScreen({
-  screen,
-  onNavigate,
-  role,
-}: {
-  screen: Screen;
-  onNavigate: (s: Screen) => void;
-  role: Role;
-}) {
-  const defaultScreen: Screen =
-    role === "coordinator" ? "dashboard" : role === "employer" ? "emp-dashboard" : "stu-dashboard";
+function PlaceholderScreen({ screen, onNavigate, role }: { screen: Screen; onNavigate: (s: Screen) => void; role: Role }) {
+  const defaultScreen: Screen = role === "coordinator" ? "dashboard" : role === "employer" ? "emp-dashboard" : "stu-dashboard";
   return (
     <div className="flex flex-col items-center justify-center min-h-[60vh] p-8 text-center">
-      <div
-        className="w-16 h-16 rounded-2xl flex items-center justify-center mb-4"
-        style={{ backgroundColor: "#ebf3fc" }}
-      >
+      <div className="w-16 h-16 rounded-2xl flex items-center justify-center mb-4" style={{ backgroundColor: "#ebf3fc" }}>
         <Bell size={28} style={{ color: "#1b5db4" }} />
       </div>
-      <h2
-        className="text-xl font-semibold mb-2"
-        style={{ fontFamily: "var(--font-display)", color: "#1a2540" }}
-      >
-        {getPageTitle(screen)}
-      </h2>
+      <h2 className="text-xl font-semibold mb-2" style={{ fontFamily: "var(--font-display)", color: "#1a2540" }}>{getPageTitle(screen)}</h2>
       <p className="text-sm mb-6" style={{ color: "#5b6a8a", maxWidth: 320 }}>
-        This section is included in the full PlacePath product. The prototype focuses on the core
-        journeys for each role.
+        This section is included in the full PlacePath product. The prototype focuses on the core journeys for each role.
       </p>
-      <button
-        onClick={() => onNavigate(defaultScreen)}
-        className="px-5 py-2.5 rounded-md text-sm font-semibold transition-opacity hover:opacity-90"
-        style={{ backgroundColor: "#1b5db4", color: "#fff", fontFamily: "var(--font-display)" }}
-      >
+      <button onClick={() => onNavigate(defaultScreen)} className="px-5 py-2.5 rounded-md text-sm font-semibold transition-opacity hover:opacity-90" style={{ backgroundColor: "#1b5db4", color: "#fff", fontFamily: "var(--font-display)" }}>
         Return to dashboard
       </button>
     </div>
@@ -166,39 +139,28 @@ export default function App() {
   const [toasts, setToasts] = useState<ToastData[]>([]);
   const [profileMenuOpen, setProfileMenuOpen] = useState(false);
   const hamburgerRef = useRef<HTMLButtonElement>(null);
-
-  // Return focus to hamburger when mobile nav closes
-  useEffect(() => {
-    if (!mobileNavOpen) {
-      hamburgerRef.current?.focus();
-    }
-  }, [mobileNavOpen]);
   const [notifOpen, setNotifOpen] = useState(false);
-  const [notifications, setNotifications] = useState<AppNotification[]>(
-    getNotificationsForRole("coordinator"),
-  );
+  const [notifications, setNotifications] = useState<AppNotification[]>(getNotificationsForRole("coordinator"));
+
+  useEffect(() => {
+    if (!mobileNavOpen) hamburgerRef.current?.focus();
+  }, [mobileNavOpen]);
 
   const addToast = useCallback((type: "success" | "error" | "info", message: string) => {
     const id = String(Date.now());
     setToasts((prev) => [...prev, { id, type, message }]);
   }, []);
 
-  const dismissToast = useCallback((id: string) => {
-    setToasts((prev) => prev.filter((t) => t.id !== id));
-  }, []);
+  const dismissToast = useCallback((id: string) => setToasts((prev) => prev.filter((t) => t.id !== id)), []);
 
   const navigate = useCallback((newScreen: Screen, payload?: unknown) => {
-    if (newScreen === "employer-detail" && typeof payload === "string") {
-      setSelectedEmployerId(payload);
-    }
+    if (newScreen === "employer-detail" && typeof payload === "string") setSelectedEmployerId(payload);
     setScreen(newScreen);
     setNotifOpen(false);
     setProfileMenuOpen(false);
   }, []);
 
-  const selectEmployer = useCallback((id: string) => {
-    setSelectedEmployerId(id);
-  }, []);
+  const selectEmployer = useCallback((id: string) => setSelectedEmployerId(id), []);
 
   const signIn = (selectedRole: Role) => {
     setRole(selectedRole);
@@ -225,21 +187,11 @@ export default function App() {
     addToast("info", `Viewing as ${p.name} — ${p.title}`);
   };
 
-  const markNotifRead = (id: string) => {
-    setNotifications((prev) => prev.map((n) => (n.id === id ? { ...n, read: true } : n)));
-  };
-
-  const markAllNotifRead = () => {
-    setNotifications((prev) => prev.map((n) => ({ ...n, read: true })));
-  };
+  const markNotifRead = (id: string) => setNotifications((prev) => prev.map((n) => (n.id === id ? { ...n, read: true } : n)));
+  const markAllNotifRead = () => setNotifications((prev) => prev.map((n) => ({ ...n, read: true })));
 
   if (!signedIn) {
-    return (
-      <>
-        <SignIn onSignIn={signIn} />
-        <Toast toasts={toasts} onDismiss={dismissToast} />
-      </>
-    );
+    return <><SignIn onSignIn={signIn} /><Toast toasts={toasts} onDismiss={dismissToast} /></>;
   }
 
   const profile = roleProfiles[role];
@@ -250,269 +202,136 @@ export default function App() {
 
   return (
     <SharedStateProvider>
-    <a href="#main-content" className="skip-link">Skip to main content</a>
-    <div className="flex h-screen overflow-hidden" style={{ backgroundColor: "#ffffff" }}>
-      {/* Sidebar */}
-      <Sidebar
-        role={role}
-        currentScreen={screen}
-        onNavigate={navigate}
-        collapsed={sidebarCollapsed}
-        onCollapse={setSidebarCollapsed}
-        mobileOpen={mobileNavOpen}
-        onMobileClose={() => setMobileNavOpen(false)}
-        onSignOut={signOut}
-      />
+      <a href="#main-content" className="skip-link">Skip to main content</a>
+      <div className="flex h-screen overflow-hidden" style={{ backgroundColor: "#ffffff" }}>
+        <Sidebar
+          role={role}
+          currentScreen={screen}
+          onNavigate={navigate}
+          collapsed={sidebarCollapsed}
+          onCollapse={setSidebarCollapsed}
+          mobileOpen={mobileNavOpen}
+          onMobileClose={() => setMobileNavOpen(false)}
+          onSignOut={signOut}
+        />
 
-      <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
-        {/* ── Global header ── */}
-        <header
-          className="flex items-center gap-2 px-4 md:px-6 flex-shrink-0"
-          style={{ height: 68, backgroundColor: "#fff", borderBottom: "1px solid #e3e9f1", zIndex: 10 }}
-        >
-          {/* Mobile: hamburger */}
-          <button
-            ref={hamburgerRef}
-            className="lg:hidden p-2 rounded-md flex-shrink-0 icon-btn"
-            style={{ color: "#5b6a8a", minHeight: 44, minWidth: 44 }}
-            onClick={() => setMobileNavOpen(true)}
-            aria-label="Open navigation"
-            aria-expanded={mobileNavOpen}
-            aria-controls="mobile-nav"
+        <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
+          <header
+            className="flex items-center gap-2 px-4 md:px-6 flex-shrink-0"
+            style={{ height: 72, minHeight: 72, backgroundColor: "#fff", borderBottom: "1px solid #e3e9f1", zIndex: 10 }}
           >
-            <Menu size={22} />
-          </button>
-
-          {/* Mobile: PlacePath logo */}
-          <div className="lg:hidden flex-shrink-0">
-            <PlacePathLogo onClick={() => navigate(defaultScreen)} />
-          </div>
-
-          {/* Desktop: subtle page title */}
-          <span
-            className="hidden lg:block text-sm font-medium ml-1 flex-shrink-0"
-            style={{ color: "#5b6a8a", fontFamily: "var(--font-display)" }}
-          >
-            {getPageTitle(screen)}
-          </span>
-
-          <div className="flex-1" />
-
-          {/* Notifications */}
-          <div className="relative flex-shrink-0">
             <button
-              className="relative p-2 rounded-md transition-colors hover:bg-ep-blue-lighter"
-              style={{ color: "#5b6a8a" }}
-              aria-label={`Notifications${unreadNotifCount > 0 ? `, ${unreadNotifCount} unread` : ""}`}
-              aria-expanded={notifOpen}
-              aria-haspopup="dialog"
-              onClick={() => {
-                setNotifOpen(!notifOpen);
-                setProfileMenuOpen(false);
-              }}
+              ref={hamburgerRef}
+              className="lg:hidden p-2 rounded-md flex-shrink-0 icon-btn"
+              style={{ color: "#5b6a8a", minHeight: 44, minWidth: 44 }}
+              onClick={() => setMobileNavOpen(true)}
+              aria-label="Open navigation"
+              aria-expanded={mobileNavOpen}
+              aria-controls="mobile-nav"
             >
-              <Bell size={20} />
-              {unreadNotifCount > 0 && (
-                <span
-                  className="absolute top-1 right-1 w-4 h-4 rounded-full flex items-center justify-center font-bold"
-                  style={{ backgroundColor: "#ef4444", color: "#fff", fontSize: 10 }}
-                  aria-hidden="true"
-                >
-                  {unreadNotifCount > 9 ? "9+" : unreadNotifCount}
-                </span>
+              <Menu size={22} />
+            </button>
+
+            <div className="lg:hidden flex-shrink-0">
+              <PlacePathLogo onClick={() => navigate(defaultScreen)} />
+            </div>
+
+            <span className="hidden lg:block text-sm font-medium ml-1 flex-shrink-0" style={{ color: "#5b6a8a", fontFamily: "var(--font-display)" }}>
+              {getPageTitle(screen)}
+            </span>
+
+            <div className="flex-1" />
+
+            <div className="relative flex-shrink-0">
+              <button
+                className="relative p-2 rounded-md transition-colors hover:bg-ep-blue-lighter"
+                style={{ color: "#5b6a8a" }}
+                aria-label={`Notifications${unreadNotifCount > 0 ? `, ${unreadNotifCount} unread` : ""}`}
+                aria-expanded={notifOpen}
+                aria-haspopup="dialog"
+                onClick={() => { setNotifOpen(!notifOpen); setProfileMenuOpen(false); }}
+              >
+                <Bell size={20} />
+                {unreadNotifCount > 0 && (
+                  <span className="absolute top-1 right-1 w-4 h-4 rounded-full flex items-center justify-center font-bold" style={{ backgroundColor: "#ef4444", color: "#fff", fontSize: 10 }} aria-hidden="true">
+                    {unreadNotifCount > 9 ? "9+" : unreadNotifCount}
+                  </span>
+                )}
+              </button>
+              {notifOpen && (
+                <NotificationsPanel notifications={notifications} onRead={markNotifRead} onReadAll={markAllNotifRead} onNavigate={navigate} onClose={() => setNotifOpen(false)} />
               )}
-            </button>
-            {notifOpen && (
-              <NotificationsPanel
-                notifications={notifications}
-                onRead={markNotifRead}
-                onReadAll={markAllNotifRead}
-                onNavigate={navigate}
-                onClose={() => setNotifOpen(false)}
-              />
-            )}
-          </div>
+            </div>
 
-          {/* Profile menu */}
-          <div className="relative flex-shrink-0">
-            <button
-              onClick={() => {
-                setProfileMenuOpen(!profileMenuOpen);
-                setNotifOpen(false);
-              }}
-              className="flex items-center gap-2 pl-1 pr-2 py-1.5 rounded-md transition-colors hover:bg-ep-blue-lighter"
-              aria-expanded={profileMenuOpen}
-              aria-haspopup="menu"
-              aria-label="User profile and options"
-            >
-              <ProfileAvatar role={role} size={32} decorative />
-              <div className="hidden sm:block text-left">
-                <p
-                  className="text-sm font-semibold leading-tight"
-                  style={{ fontFamily: "var(--font-display)", color: "#1a2540" }}
-                >
-                  {profile.name}
-                </p>
-                <p className="text-xs leading-tight" style={{ color: "#5b6a8a" }}>
-                  {profile.title}
-                </p>
-              </div>
-              <ChevronDown
-                size={14}
-                style={{
-                  color: "#9ca3af",
-                  transition: "transform 0.15s",
-                  transform: profileMenuOpen ? "rotate(180deg)" : "none",
-                }}
-                aria-hidden="true"
-              />
-            </button>
+            <div className="relative flex-shrink-0">
+              <button
+                onClick={() => { setProfileMenuOpen(!profileMenuOpen); setNotifOpen(false); }}
+                className="flex items-center gap-2 pl-1 pr-2 py-1.5 rounded-md transition-colors hover:bg-ep-blue-lighter"
+                aria-expanded={profileMenuOpen}
+                aria-haspopup="menu"
+                aria-label="User profile and options"
+              >
+                <ProfileAvatar role={role} size={32} decorative />
+                <div className="hidden sm:block text-left">
+                  <p className="text-sm font-semibold leading-tight" style={{ fontFamily: "var(--font-display)", color: "#1a2540" }}>{profile.name}</p>
+                  <p className="text-xs leading-tight" style={{ color: "#5b6a8a" }}>{profile.title}</p>
+                </div>
+                <ChevronDown size={14} style={{ color: "#9ca3af", transition: "transform 0.15s", transform: profileMenuOpen ? "rotate(180deg)" : "none" }} aria-hidden="true" />
+              </button>
 
-            {profileMenuOpen && (
-              <>
-                <div
-                  className="fixed inset-0 z-30"
-                  onClick={() => setProfileMenuOpen(false)}
-                  aria-hidden="true"
-                />
-                <div
-                  className="absolute right-0 top-full mt-1 z-40 rounded-xl border shadow-xl overflow-hidden"
-                  style={{ backgroundColor: "#fff", borderColor: "#d5e2f0", minWidth: 260 }}
-                  role="menu"
-                >
-                  <div
-                    className="flex items-center gap-3 px-4 py-4 border-b"
-                    style={{ borderColor: "#ebf3fc" }}
-                  >
-                    <ProfileAvatar role={role} size={36} />
-                    <div>
-                      <p
-                        className="text-sm font-semibold"
-                        style={{ fontFamily: "var(--font-display)", color: "#1a2540" }}
-                      >
-                        {profile.name}
-                      </p>
-                      <p className="text-xs" style={{ color: "#5b6a8a" }}>
-                        {profile.title}
-                      </p>
+              {profileMenuOpen && (
+                <>
+                  <div className="fixed inset-0 z-30" onClick={() => setProfileMenuOpen(false)} aria-hidden="true" />
+                  <div className="absolute right-0 top-full mt-1 z-40 rounded-xl border shadow-xl overflow-hidden" style={{ backgroundColor: "#fff", borderColor: "#d5e2f0", minWidth: 260 }} role="menu">
+                    <div className="flex items-center gap-3 px-4 py-4 border-b" style={{ borderColor: "#ebf3fc" }}>
+                      <ProfileAvatar role={role} size={36} />
+                      <div>
+                        <p className="text-sm font-semibold" style={{ fontFamily: "var(--font-display)", color: "#1a2540" }}>{profile.name}</p>
+                        <p className="text-xs" style={{ color: "#5b6a8a" }}>{profile.title}</p>
+                      </div>
+                    </div>
+                    <div className="px-4 pt-3 pb-1">
+                      <p className="text-xs font-semibold uppercase tracking-wide mb-2" style={{ color: "#9ca3af", fontFamily: "var(--font-display)" }}>View prototype as</p>
+                    </div>
+                    {viewAsOptions.map((opt) => (
+                      <button key={opt.role} role="menuitem" onClick={() => switchRole(opt.role)} className="w-full flex items-center gap-3 px-4 py-3 text-left hover:bg-ep-blue-lighter transition-colors">
+                        <div className="flex-1">
+                          <p className="text-sm font-medium" style={{ fontFamily: "var(--font-display)", color: "#1a2540" }}>{opt.name}</p>
+                          <p className="text-xs" style={{ color: "#5b6a8a" }}>{opt.desc}</p>
+                        </div>
+                        {role === opt.role && <Check size={16} style={{ color: "#1b5db4" }} />}
+                      </button>
+                    ))}
+                    <div className="border-t" style={{ borderColor: "#ebf3fc" }}>
+                      <button role="menuitem" onClick={signOut} className="w-full flex items-center gap-2 px-4 py-3 text-left text-sm hover:bg-gray-50" style={{ color: "#5b6a8a" }}>
+                        <LogOut size={15} /> Sign out
+                      </button>
                     </div>
                   </div>
+                </>
+              )}
+            </div>
+          </header>
 
-                  <div className="px-4 pt-3 pb-1">
-                    <p
-                      className="text-xs font-semibold uppercase tracking-wide mb-2"
-                      style={{ color: "#9ca3af", fontFamily: "var(--font-display)" }}
-                    >
-                      View prototype as
-                    </p>
-                  </div>
-                  {viewAsOptions.map((opt) => (
-                    <button
-                      key={opt.role}
-                      role="menuitem"
-                      onClick={() => switchRole(opt.role)}
-                      className="w-full flex items-center gap-3 px-4 py-2.5 text-left transition-colors hover:bg-ep-blue-lighter"
-                    >
-                      <ProfileAvatar role={opt.role} size={28} />
-                      <div className="flex-1 min-w-0">
-                        <p
-                          className="text-sm font-medium"
-                          style={{ color: "#1a2540", fontFamily: "var(--font-display)" }}
-                        >
-                          {opt.name}
-                        </p>
-                        <p className="text-xs" style={{ color: "#5b6a8a" }}>
-                          {opt.desc}
-                        </p>
-                      </div>
-                      {role === opt.role && (
-                        <Check size={14} style={{ color: "#1b5db4", flexShrink: 0 }} />
-                      )}
-                    </button>
-                  ))}
+          <main id="main-content" className="flex-1 overflow-y-auto" tabIndex={-1}>
+            {screen === "dashboard" && <Dashboard onNavigate={navigate} onAddToast={addToast} />}
+            {screen === "create-placement" && <CreatePlacement onNavigate={navigate} onAddToast={addToast} />}
+            {screen === "employers" && <Employers onNavigate={navigate} onSelectEmployer={selectEmployer} />}
+            {screen === "employer-detail" && <EmployerDetail employerId={selectedEmployerId} onNavigate={navigate} onAddToast={addToast} />}
+            {screen === "placements" && <Placements onNavigate={navigate} />}
+            {screen === "tasks" && <Tasks role={role} onNavigate={navigate} onAddToast={addToast} />}
+            {screen === "messages" && <Messages role={role} />}
+            {screen === "emp-dashboard" && <EmployerDashboard onNavigate={navigate} onAddToast={addToast} />}
+            {screen === "emp-messages" && <Messages role="employer" />}
+            {screen === "stu-dashboard" && <StudentDashboard onNavigate={navigate} onAddToast={addToast} />}
+            {screen === "stu-messages" && <Messages role="student" />}
+            {!["dashboard", "create-placement", "employers", "employer-detail", "placements", "tasks", "messages", "emp-dashboard", "emp-messages", "stu-dashboard", "stu-messages"].includes(screen) && <PlaceholderScreen screen={screen} onNavigate={navigate} role={role} />}
+          </main>
 
-                  <div className="border-t mt-1" style={{ borderColor: "#ebf3fc" }} />
-                  <button
-                    role="menuitem"
-                    onClick={signOut}
-                    className="w-full flex items-center gap-3 px-4 py-3 text-left transition-colors hover:bg-ep-blue-lighter"
-                  >
-                    <LogOut size={15} style={{ color: "#9ca3af" }} />
-                    <span className="text-sm" style={{ color: "#5b6a8a" }}>
-                      Sign out
-                    </span>
-                  </button>
-                </div>
-              </>
-            )}
-          </div>
-        </header>
-
-        {/* ── Main content ── */}
-        <main
-          className={`flex-1 min-h-0 flex flex-col ${screen === messagesScreen ? "overflow-hidden" : "overflow-y-auto pb-20 md:pb-0"}`}
-          id="main-content"
-          tabIndex={-1}
-        >
-          {/* Tasks — all roles */}
-          {screen === tasksScreen && <Tasks role={role} onAddToast={addToast} />}
-
-          {/* Messages — all roles */}
-          {screen === messagesScreen && <Messages role={role} onAddToast={addToast} />}
-
-          {/* ── Coordinator screens ── */}
-          {role === "coordinator" && screen === "dashboard" && (
-            <Dashboard onNavigate={navigate} onAddToast={addToast} />
-          )}
-          {role === "coordinator" && screen === "create-placement" && (
-            <CreatePlacement onNavigate={navigate} onAddToast={addToast} />
-          )}
-          {role === "coordinator" && screen === "employers" && (
-            <Employers onNavigate={navigate} onSelectEmployer={selectEmployer} />
-          )}
-          {role === "coordinator" && screen === "employer-detail" && (
-            <EmployerDetail
-              employerId={selectedEmployerId}
-              onNavigate={navigate}
-              onAddToast={addToast}
-            />
-          )}
-          {role === "coordinator" && screen === "placements" && (
-            <Placements onNavigate={navigate} />
-          )}
-          {role === "coordinator" &&
-            ["students", "visits", "notifications", "reports", "settings", "help"].includes(
-              screen,
-            ) && <PlaceholderScreen screen={screen} onNavigate={navigate} role={role} />}
-
-          {/* ── Employer screens ── */}
-          {role === "employer" && screen === "emp-dashboard" && (
-            <EmployerDashboard onAddToast={addToast} />
-          )}
-          {role === "employer" &&
-            !["emp-dashboard", "emp-requests", "emp-messages"].includes(screen) && (
-              <PlaceholderScreen screen={screen} onNavigate={navigate} role={role} />
-            )}
-
-          {/* ── Student screens ── */}
-          {role === "student" && screen === "stu-dashboard" && (
-            <StudentDashboard onAddToast={addToast} />
-          )}
-          {role === "student" &&
-            !["stu-dashboard", "stu-tasks", "stu-messages"].includes(screen) && (
-              <PlaceholderScreen screen={screen} onNavigate={navigate} role={role} />
-            )}
-        </main>
+          <BottomNav role={role} currentScreen={screen} onNavigate={navigate} taskCount={4} messageCount={2} />
+        </div>
       </div>
-
       <Toast toasts={toasts} onDismiss={dismissToast} />
-      <BottomNav
-        role={role}
-        currentScreen={screen}
-        onNavigate={navigate}
-        onOpenMore={() => setMobileNavOpen(true)}
-      />
-    </div>
     </SharedStateProvider>
   );
 }
