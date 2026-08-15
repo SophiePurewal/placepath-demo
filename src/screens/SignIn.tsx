@@ -9,9 +9,9 @@ interface SignInProps {
 }
 
 const roleOptions: { value: Role; label: string; desc: string }[] = [
-  { value: "coordinator", label: "Sarah Ahmed", desc: "Placement Coordinator — Northbridge College" },
-  { value: "employer", label: "David Hughes", desc: "Operations Manager — Nessie Nursery" },
-  { value: "student", label: "Maya Thompson", desc: "Health and Social Care L3 Student" },
+  { value: "coordinator", label: "Sarah Ahmed (Persona 1)", desc: "Placement Coordinator — Northbridge College" },
+  { value: "employer", label: "David Hughes (Persona 2)", desc: "Operations Manager — Nessie Nursery" },
+  { value: "student", label: "Maya Thompson (Persona 3)", desc: "Health and Social Care L3 Student" },
 ];
 
 export default function SignIn({ onSignIn }: SignInProps) {
@@ -77,10 +77,10 @@ export default function SignIn({ onSignIn }: SignInProps) {
               className="text-2xl mb-1"
               style={{ fontFamily: "var(--font-display)", fontWeight: 700, color: "#1a2540" }}
             >
-              Sign in
+              Welcome to the working demo of PlacePath
             </h1>
             <p className="text-sm mb-6" style={{ color: "#5b6a8a" }}>
-              Welcome back. Please sign in to continue.
+              Choose a persona to sign in with.
             </p>
 
             {/* Prototype role selector */}
