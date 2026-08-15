@@ -5,26 +5,26 @@ interface BrandLogoProps {
 }
 
 const sizes = {
-  sm: { iconWidth: 25, iconHeight: 18, fontSize: 20, gap: 8 },
-  md: { iconWidth: 29, iconHeight: 21, fontSize: 22, gap: 9 },
-  lg: { iconWidth: 36, iconHeight: 26, fontSize: 28, gap: 11 },
+  sm: { iconWidth: 26, iconHeight: 20, fontSize: 20, gap: 9 },
+  md: { iconWidth: 32, iconHeight: 24, fontSize: 22, gap: 10 },
+  lg: { iconWidth: 40, iconHeight: 30, fontSize: 28, gap: 12 },
 };
 
 export default function BrandLogo({
   size = "md",
-  dark = true,
+  dark = false,
   markOnly = false,
 }: BrandLogoProps) {
   const dimensions = sizes[size];
   const primaryText = dark ? "#ffffff" : "#1a2540";
-  const accent = dark ? "#7db8f5" : "#1b5db4";
+  const accent = dark ? "#7db8f5" : "#2f66d0";
 
   return (
     <span
       aria-label="PlacePath"
       style={{
         display: "inline-flex",
-        alignItems: "center",
+        alignItems: "flex-end",
         gap: markOnly ? 0 : dimensions.gap,
         lineHeight: 1,
         flexShrink: 0,
@@ -33,15 +33,15 @@ export default function BrandLogo({
       <svg
         width={dimensions.iconWidth}
         height={dimensions.iconHeight}
-        viewBox="0 0 36 26"
+        viewBox="0 0 40 30"
         role="img"
         aria-hidden="true"
         focusable="false"
         style={{ display: "block", flexShrink: 0 }}
       >
-        <polygon points="3,5 14,5 10,11 0,11" fill={accent} />
-        <polygon points="10,12 23,12 19,18 6,18" fill={accent} />
-        <polygon points="19,19 36,19 32,25 15,25" fill={accent} />
+        <rect x="2" y="2" width="36" height="7" rx="1.5" fill={accent} />
+        <rect x="2" y="11.5" width="21" height="7" rx="1.5" fill={accent} />
+        <rect x="2" y="21" width="36" height="7" rx="1.5" fill={accent} />
       </svg>
       {!markOnly && (
         <span
@@ -52,6 +52,7 @@ export default function BrandLogo({
             color: primaryText,
             letterSpacing: "-0.5px",
             whiteSpace: "nowrap",
+            lineHeight: 1,
           }}
         >
           Place<span style={{ color: accent }}>Path</span>
