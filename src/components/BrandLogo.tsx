@@ -30,11 +30,11 @@ export default function BrandLogo({
         flexShrink: 0,
       }}
     >
+      {/* Single PlacePath mark — no secondary/stepped icon */}
       <svg
         width={dimensions.iconWidth}
         height={dimensions.iconHeight}
         viewBox="0 0 40 30"
-        role="img"
         aria-hidden="true"
         focusable="false"
         style={{ display: "block", flexShrink: 0 }}
@@ -43,6 +43,7 @@ export default function BrandLogo({
         <rect x="2" y="11.5" width="21" height="7" rx="1.5" fill={accent} />
         <rect x="2" y="21" width="36" height="7" rx="1.5" fill={accent} />
       </svg>
+
       {!markOnly && (
         <span
           style={{
