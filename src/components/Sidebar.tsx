@@ -34,7 +34,6 @@ export type Screen =
   | "help"
   | "create-placement"
   | "placement-detail"
-  // employer screens
   | "emp-dashboard"
   | "emp-requests"
   | "emp-active"
@@ -42,7 +41,6 @@ export type Screen =
   | "emp-documents"
   | "emp-messages"
   | "emp-organisation"
-  // student screens
   | "stu-dashboard"
   | "stu-placement"
   | "stu-tasks"
@@ -117,33 +115,21 @@ export default function Sidebar({
   onMobileClose,
   onSignOut,
 }: SidebarProps) {
-  const navItems =
-    role === "coordinator"
-      ? coordinatorNav
-      : role === "employer"
-        ? employerNav
-        : studentNav;
-
-  const userInfo =
-    role === "coordinator"
-      ? { name: "Sarah Ahmed", title: "Placement Coordinator", initials: "SA" }
-      : role === "employer"
-        ? { name: "David Hughes", title: "Operations Manager", initials: "DH" }
-        : { name: "Maya Thompson", title: "Health & Social Care L3", initials: "MT" };
+  const navItems = role === "coordinator" ? coordinatorNav : role === "employer" ? employerNav : studentNav;
+  const userInfo = role === "coordinator"
+    ? { name: "Sarah Ahmed", title: "Placement Coordinator" }
+    : role === "employer"
+      ? { name: "David Hughes", title: "Operations Manager" }
+      : { name: "Maya Thompson", title: "Health & Social Care L3" };
 
   const closeButtonRef = useRef<HTMLButtonElement>(null);
-  const firstNavButtonRef = useRef<HTMLButtonElement>(null);
 
-  // Close drawer on Escape and return focus to the hamburger button
   useEffect(() => {
     if (!mobileOpen) return;
     const onKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape") {
-        onMobileClose();
-      }
+      if (e.key === "Escape") onMobileClose();
     };
     document.addEventListener("keydown", onKeyDown);
-    // Move focus into the drawer when it opens
     closeButtonRef.current?.focus();
     return () => document.removeEventListener("keydown", onKeyDown);
   }, [mobileOpen, onMobileClose]);
@@ -154,22 +140,16 @@ export default function Sidebar({
   };
 
   const SidebarContent = () => (
-    <div className="flex flex-col h-full">
-      {/* Logo */}
+    <div className="flex flex-col h-full" style={{ backgroundColor: "#ffffff", color: "#1a2540" }}>
       <div
         className={`flex items-center border-b ${collapsed ? "justify-center px-2" : "px-5"}`}
-        style={{
-          height: 64,
-          borderColor: "rgba(255,255,255,0.1)",
-          minHeight: 64,
-        }}
+        style={{ height: 72, minHeight: 72, borderColor: "#e3e9f1" }}
       >
-        <BrandLogo size="md" dark markOnly={collapsed} />
-        {/* mobile close */}
+        <BrandLogo size="md" dark={false} markOnly={collapsed} />
         <button
           ref={closeButtonRef}
-          className="ml-auto lg:hidden p-1 rounded"
-          style={{ color: "rgba(255,255,255,0.6)" }}
+          className="ml-auto lg:hidden p-2 rounded-md"
+          style={{ color: "#5b6a8a" }}
           onClick={onMobileClose}
           aria-label="Close navigation"
         >
@@ -177,116 +157,87 @@ export default function Sidebar({
         </button>
       </div>
 
-      {/* Nav items */}
-      <nav className="flex-1 py-3 overflow-y-auto" aria-label="Main navigation">
+      <nav className="flex-1 py-4 px-3 overflow-y-auto" aria-label="Main navigation">
         {navItems.map((item) => {
           const Icon = item.icon;
-          const active = currentScreen === item.id ||
-            (item.id === "employers" && currentScreen === "employer-detail");
+          const active = currentScreen === item.id || (item.id === "employers" && currentScreen === "employer-detail");
           return (
             <button
               key={item.id}
               onClick={() => navigate(item.id)}
-              className="nav-btn w-full flex items-center gap-3 px-4 text-left transition-colors relative"
+              className={`w-full flex items-center gap-3 text-left transition-colors relative ${collapsed ? "justify-center px-2" : "px-3"}`}
               style={{
                 fontFamily: "var(--font-display)",
-                fontWeight: active ? 600 : 400,
-                fontSize: 16,
-                minHeight: 44,
-                paddingTop: 10,
-                paddingBottom: 10,
-                color: active ? "#ffffff" : "rgba(200,214,236,0.85)",
-                backgroundColor: active ? "rgba(255,255,255,0.1)" : "transparent",
-                borderLeft: active ? "3px solid #4b82c8" : "3px solid transparent",
+                fontWeight: active ? 600 : 500,
+                fontSize: 15,
+                minHeight: 46,
+                marginBottom: 4,
+                borderRadius: 10,
+                color: active ? "#1b5db4" : "#263653",
+                backgroundColor: active ? "#eef5ff" : "transparent",
+                border: "0",
               }}
               aria-current={active ? "page" : undefined}
             >
-              <Icon size={18} style={{ flexShrink: 0, opacity: active ? 1 : 0.75 }} />
+              <Icon size={19} strokeWidth={1.8} style={{ flexShrink: 0, color: active ? "#1b5db4" : "#42516c" }} />
               {!collapsed && <span className="nav-label flex-1 truncate">{item.label}</span>}
               {!collapsed && item.badge && (
                 <span
-                  className="text-xs font-semibold rounded-full px-1.5 py-0.5 min-w-[20px] text-center"
-                  style={{ backgroundColor: "#1b5db4", color: "#fff", fontSize: 11 }}
+                  className="text-xs font-semibold rounded-full min-w-[20px] h-5 px-1.5 inline-flex items-center justify-center"
+                  style={{ backgroundColor: "#2f66d0", color: "#fff", fontSize: 11 }}
                 >
                   {item.badge}
                 </span>
-              )}
-              {collapsed && item.badge && (
-                <span
-                  className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full"
-                  style={{ backgroundColor: "#4b82c8" }}
-                />
               )}
             </button>
           );
         })}
       </nav>
 
-      {/* Sidebar controls + user */}
-      <div
-        className="border-t"
-        style={{ borderColor: "rgba(255,255,255,0.1)" }}
-      >
-        {/* Collapse control sits above the signed-in user */}
+      <div className="border-t" style={{ borderColor: "#e3e9f1" }}>
+        <div className={`flex items-center py-3 ${collapsed ? "justify-center px-2" : "gap-3 px-4"}`}>
+          <ProfileAvatar role={role} size={36} />
+          {!collapsed && (
+            <div className="min-w-0 flex-1">
+              <p className="text-sm font-semibold truncate" style={{ color: "#1a2540", fontFamily: "var(--font-display)" }}>
+                {userInfo.name}
+              </p>
+              <p className="text-xs truncate" style={{ color: "#6b7892" }}>{userInfo.title}</p>
+            </div>
+          )}
+        </div>
+
         <button
           onClick={() => onCollapse(!collapsed)}
-          className={`sidebar-collapse hidden lg:flex w-full items-center py-2.5 transition-colors ${collapsed ? "justify-center px-2" : "gap-2 px-4"}`}
-          style={{ color: "rgba(200,214,236,0.75)", fontSize: 13 }}
+          className={`sidebar-collapse hidden lg:flex w-full items-center py-2.5 border-t ${collapsed ? "justify-center px-2" : "gap-2 px-4"}`}
+          style={{ borderColor: "#eef2f7", color: "#6b7892", fontSize: 13, background: "transparent" }}
           aria-label={collapsed ? "Expand navigation" : "Collapse navigation"}
         >
           {collapsed ? <ChevronRight size={17} /> : <ChevronLeft size={17} />}
           {!collapsed && <span>Collapse</span>}
         </button>
 
-        {/* User info — avatar remains visible when the sidebar is collapsed */}
-        <div
-          className={`flex items-center py-3 border-t ${collapsed ? "justify-center px-2" : "gap-3 px-4"}`}
-          style={{ borderColor: "rgba(255,255,255,0.08)" }}
+        <button
+          onClick={onSignOut}
+          className={`w-full flex items-center py-2.5 border-t ${collapsed ? "justify-center px-2" : "gap-2 px-4"}`}
+          style={{ borderColor: "#eef2f7", color: "#6b7892", fontSize: 13, background: "transparent" }}
+          aria-label="Sign out"
         >
-            <ProfileAvatar role={role} size={36} />
-            {!collapsed && <div className="min-w-0">
-              <p
-                className="text-sm font-semibold truncate"
-                style={{ color: "#fff", fontFamily: "var(--font-display)" }}
-              >
-                {userInfo.name}
-              </p>
-              <p
-                className="text-xs truncate"
-                style={{ color: "rgba(200,214,236,0.7)" }}
-              >
-                {userInfo.title}
-              </p>
-            </div>}
-        </div>
-
-        {/* Sign out */}
-        <div
-          className="flex items-center px-3 py-2 gap-1 border-t"
-          style={{ borderColor: "rgba(255,255,255,0.08)" }}
-        >
-          <button
-            onClick={onSignOut}
-            className="nav-btn flex items-center gap-2 px-2 py-2 rounded transition-colors flex-1"
-            style={{ color: "rgba(200,214,236,0.7)", fontSize: 13 }}
-            aria-label="Sign out"
-          >
-            <LogOut size={16} />
-            {!collapsed && <span className="nav-label">Sign out</span>}
-          </button>
-        </div>
+          <LogOut size={16} />
+          {!collapsed && <span>Sign out</span>}
+        </button>
       </div>
     </div>
   );
 
   return (
     <>
-      {/* Desktop sidebar */}
       <aside
-        className="hidden lg:flex flex-col flex-shrink-0 transition-all duration-200"
+        className="hidden lg:flex flex-col flex-shrink-0 transition-all duration-200 border-r"
         style={{
-          width: collapsed ? 64 : 240,
-          backgroundColor: "#1a2540",
+          width: collapsed ? 72 : 272,
+          backgroundColor: "#ffffff",
+          borderColor: "#e3e9f1",
           height: "100vh",
           position: "sticky",
           top: 0,
@@ -296,22 +247,21 @@ export default function Sidebar({
         <SidebarContent />
       </aside>
 
-      {/* Mobile overlay */}
       {mobileOpen && (
         <div
           className="fixed inset-0 z-40 lg:hidden"
-          style={{ backgroundColor: "rgba(0,0,0,0.5)" }}
+          style={{ backgroundColor: "rgba(15, 23, 42, 0.35)" }}
           onClick={onMobileClose}
           aria-hidden="true"
         />
       )}
 
-      {/* Mobile drawer */}
       <aside
-        className="fixed top-0 left-0 h-full z-50 lg:hidden transition-transform duration-200"
+        className="fixed top-0 left-0 h-full z-50 lg:hidden transition-transform duration-200 border-r"
         style={{
-          width: 260,
-          backgroundColor: "#1a2540",
+          width: 280,
+          backgroundColor: "#ffffff",
+          borderColor: "#e3e9f1",
           transform: mobileOpen ? "translateX(0)" : "translateX(-100%)",
         }}
         aria-label="Primary navigation"
