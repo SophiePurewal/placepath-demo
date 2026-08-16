@@ -77,10 +77,10 @@ export default function SignIn({ onSignIn }: SignInProps) {
               className="text-2xl mb-1"
               style={{ fontFamily: "var(--font-display)", fontWeight: 700, color: "#1a2540" }}
             >
-              Welcome to the working demo of PlacePath
+              PlacePath Prototype
             </h1>
             <p className="text-sm mb-6" style={{ color: "#5b6a8a" }}>
-              Choose a persona to sign in with.
+              Please choose a persona to sign in with.
             </p>
 
             {/* Prototype role selector */}
