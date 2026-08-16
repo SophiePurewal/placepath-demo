@@ -34,7 +34,7 @@ export default function Dashboard({ onNavigate, onAddToast }: DashboardProps) {
   return <div className="ep-page pp-dashboard">
     <div className="pp-title-row"><h1 className="ep-page-title">Dashboard</h1><button className="pp-primary" onClick={() => onNavigate("create-placement")}><Plus size={17}/>New placement</button></div>
 
-    <section className="ep-panel pp-welcome"><div><h2>Welcome back, Sarah</h2><p>Here’s what’s happening with your placements.</p></div><div className="pp-welcome-art" aria-hidden="true"><span className="pp-orbit"/><span className="pp-plant">♧</span><span className="pp-person"/><span className="pp-laptop"/></div></section>
+    <section className="ep-panel pp-welcome"><div><h2>Welcome back, Sarah</h2><p>Here’s what’s happening with your placements.</p></div></section>
 
     <div className="pp-metrics">{metrics.map(({ label, value, change, icon: Icon, colour }) => <section key={label} className="ep-panel pp-metric"><span className="pp-metric-icon" style={{ background: colour }}><Icon size={23}/></span><div><strong>{value}</strong><span>{label}</span><small>{change}</small></div></section>)}</div>
 
